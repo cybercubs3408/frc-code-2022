@@ -94,7 +94,7 @@ public class Lift {
         outRightLift.set(ControlMode.PercentOutput, -Math.abs(power2));
 
     }
-// WIP CODE BELOW. NOT RUNNABLE
+
     /**
      * Rotates the outer lift clockwise
      * @param power3 The unspecified power used to rotate the outer lift

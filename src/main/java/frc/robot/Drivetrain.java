@@ -47,4 +47,28 @@ public class Drivetrain {
         backRight.setInverted(backRightInvert);
 
     }   
+
+    /**
+     * Stops drivetrain motors
+     */
+    public void stop() {
+
+        frontLeft.set(0);
+        frontRight.set(0);
+        backLeft.set(0);
+        backRight.set(0);
+
+    }
+
+    /**
+     * Resets encoder values to 0
+     */
+    public void resetEncoders() {
+
+        frontLeftEncoder.setPosition(0);
+        frontRightEncoder.setPosition(0);
+        backLeftEncoder.setPosition(0);
+        backRightEncoder.setPosition(0);
+
+    }
 }
