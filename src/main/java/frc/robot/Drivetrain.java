@@ -71,4 +71,78 @@ public class Drivetrain {
         backRightEncoder.setPosition(0);
 
     }
+
+    /**
+     * 
+     * @param leftJoystick  Object of Joystick; controls left joysstick
+     * @param rightJoystick  Object of Joystick; controls right joystick
+     */
+    public void drive(Joystick leftJoystick, Joystick rightJoystick){
+        
+        double leftPower = leftJoystick.getRawAxis(1);
+        double rightPower = rightJoystick.getRawAxis(1);
+
+        // Alter decimal being multiplied to change the power as needed
+
+        frontLeft.set(0.75 * leftPower);
+        backLeft.set(0.75 * leftPower);
+        frontRight.set(0.75 * rightPower);
+        backRight.set(0.75 * rightPower);
+    }
+
+    /**
+     * Method to aim the robot while preparing to shoot
+     * @param direction String set to either "left" or "right" to indicate which direction to turn
+     * @param power Power to control turning
+     */
+    public void autoAim(String direction, double power) {
+
+        if (direction.equals("left")) {
+
+            frontLeft.set(-power);
+            backLeft.set(-power);
+            frontRight.set(power);
+            backRight.set(power);
+            
+        } 
+        else if (direction.equals("right")) {
+
+            frontLeft.set(power);
+            backLeft.set(power);
+            frontRight.set(-power);
+            backRight.set(-power);
+
+        }
+    }
+
+    /**
+     * Method used to aim the robot before activting the shooter
+     * @param smartDashboardDisplay Boolean as to whether or not smart dashboard values will be displayed, basically always true
+     * @param limelight The limelight
+     * Updates limelight variables, reads the x value of target and turns robot right or left until the x is close to zero (facing target)
+     */
+    public void prepareShoot (boolean smartDashboardDisplay, Limelight limelight) {
+        
+        limelight.updateLimelightVariables(smartDashboardDisplay);
+
+        if (Math.abs(limelight.xOff) > 0.2) {
+
+            limelight.updateLimelightVariables(smartDashboardDisplay);
+
+            if (limelight.xOff > 0) {
+
+                autoAim("left", 0.1);
+
+            }
+
+            else if (limelight.xOff < 0) {
+
+                autoAim("right", 0.1);
+
+            }
+
+        }
+
+        stop();
+    }
 }
