@@ -73,7 +73,7 @@ public class Drivetrain {
     }
 
     /**
-     * 
+     * Class to initiate driving
      * @param leftJoystick  Object of Joystick; controls left joysstick
      * @param rightJoystick  Object of Joystick; controls right joystick
      */
@@ -125,7 +125,7 @@ public class Drivetrain {
         
         limelight.updateLimelightVariables(smartDashboardDisplay);
 
-        if (Math.abs(limelight.xOff) > 0.2) {
+        if (Math.abs(limelight.xOff) > 0.5) {
 
             limelight.updateLimelightVariables(smartDashboardDisplay);
 

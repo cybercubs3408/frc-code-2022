@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   Drivetrain drivetrain = new Drivetrain(frontLeftID, frontRightID, backLeftID, backRightID);
   Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
   Limelight limelight = new Limelight(limelightHeight, targetHeight, limelightAngle);
+  Shooter shooter = new Shooter(kP, kI, kD);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
     hopper.setInversion(topHopperInverted, bottomHopperInverted);
     drivetrain.setInversion(frontLeftInvert, frontRightInvert, backLeftInvert, backRightInvert);
     lift.setInversionStatus(inLeftLiftInvert, outLeftLiftInvert, inRightLiftInvert, outRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
+    shooter.setInversionStatus(shooterRightInversion, shooterLeftInversion);
 
   }
 
@@ -49,12 +51,16 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
+
   }
 
   /** This function is called once each time the robot enters teleoperated mode. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    
+  }
+
+  
 
   /** This function is called periodically during teleoperated mode. */
   @Override

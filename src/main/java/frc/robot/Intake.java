@@ -29,7 +29,7 @@ public class Intake {
 
     /**
      * Method to run the intake 
-     * @param power Unspecified power to run the intake motor
+     * @param power Unspecified power to run the intake arm motor
      */
     public void intakeIn (double power) {
 
@@ -39,7 +39,7 @@ public class Intake {
 
     /**
      * Method to run the intake in reverse
-     * @param power2 Unspecified negative power for the intake motor
+     * @param power2 Unspecified negative power for the intake arm motor
      */
     public void intakeOut (double power2) {
 
