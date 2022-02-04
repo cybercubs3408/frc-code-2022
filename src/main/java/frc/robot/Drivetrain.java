@@ -74,7 +74,7 @@ public class Drivetrain {
 
     /**
      * Class to initiate driving
-     * @param leftJoystick  Object of Joystick; controls left joysstick
+     * @param leftJoystick  Object of Joystick; controls left joystick
      * @param rightJoystick  Object of Joystick; controls right joystick
      */
     public void drive(Joystick leftJoystick, Joystick rightJoystick){

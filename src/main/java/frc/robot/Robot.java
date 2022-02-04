@@ -20,12 +20,17 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
  */
 public class Robot extends TimedRobot {
   
-  Intake intake = new Intake(intakeMotorID);
+  Intake intake = new Intake(intakeMotorID, intakeArmID);
   Hopper hopper = new Hopper(topHopperID, bottomHopperID);
   Drivetrain drivetrain = new Drivetrain(frontLeftID, frontRightID, backLeftID, backRightID);
   Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
   Limelight limelight = new Limelight(limelightHeight, targetHeight, limelightAngle);
   Shooter shooter = new Shooter(kP, kI, kD);
+  Joystick leftJoystick = new Joystick(0);
+  Joystick rightJoystick = new Joystick(1);
+  Joystick XBOXController = new Joystick(2);
+
+  Boolean armUp = true;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,7 +39,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    intake.setInversion(intakeMotorInverted);
+    intake.setInversion(intakeMotorInverted, intakeArmInverted);
     hopper.setInversion(topHopperInverted, bottomHopperInverted);
     drivetrain.setInversion(frontLeftInvert, frontRightInvert, backLeftInvert, backRightInvert);
     lift.setInversionStatus(inLeftLiftInvert, outLeftLiftInvert, inRightLiftInvert, outRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
@@ -57,7 +62,12 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters teleoperated mode. */
   @Override
   public void teleopInit() {
-    
+
+    drivetrain.stop();
+    drivetrain.resetEncoders();
+    shooter.stop();
+    shooter.resetEncoders();
+
   }
 
   
@@ -66,16 +76,80 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     
-    drivetrain.stop();
-    drivetrain.resetEncoders();
+    drivetrain.drive(leftJoystick, rightJoystick);
+
+    //B button is pressed once --> arm up or down
+    if (XBOXController.getRawButtonPressed(1)) {
+
+      if (armUp) {
+
+        intake.armDown();
+        armUp = false;
+
+      }
+
+      else if (armUp == false) {
+
+        intake.armUp();
+        armUp = true;
+
+      }
+    }
+
+    //L1 button is held --> spin intake
+    if (XBOXController.getRawButton(4)) {
+
+      intake.intakeIn(.5);
+
+    }
+
+    //R1 button is held --> spin outtake
+    if (XBOXController.getRawButton(5)) {
+
+      intake.intakeIn(.5);
+
+    }
+
+    //left joystick trigger --> first hopper motor in
+    if (leftJoystick.getRawButton(0)) {
+
+      hopper.hopperIn(.3);
+
+    }
+
+    //right jostick trigger --> beeg shoot button
+    if (rightJoystick.getRawButton(0)) {
+
+      drivetrain.prepareShoot(true, limelight);
+      hopper.hopperIn(.3);
+      hopper.hopperShoot(.3);
+
+    }
     
+    //X button on XBOX Controller --> outer hopper outtake
+    if (XBOXController.getRawButton(2)) {
+
+      hopper.hopperOut(.3);
+
+    }
+
+    //Y button on XBOX Controller --> inner hopper motor outtakes
+    if (XBOXController.getRawButton(3)) {
+
+      hopper.hopperSpit(.3);
+
+    }
   }
 
   /** This function is called once each time the robot enters test mode. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    
+  }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+
+  }
 }

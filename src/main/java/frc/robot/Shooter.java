@@ -8,6 +8,8 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.CANSparkMax.ControlType;
+
 
 public class Shooter{
 
@@ -15,7 +17,6 @@ public class Shooter{
     CANSparkMax rightShooterMotor, leftShooterMotor;
     SparkMaxPIDController shooterPID;
     RelativeEncoder rightShooterEncoder, leftShooterEncoder;
-
 
 
     /**
@@ -57,6 +58,10 @@ public class Shooter{
         shooterPID.setOutputRange(minOutput, maxOutput);
     }
 
+    /**
+     * Updates the PID coefficients 
+     * @param smartDashboardDisplay Boolean on whether or not to display smart daashboard values
+     */
     public void updatePIDCoefficients(boolean smartDashboardDisplay) {
 
         double p = SmartDashboard.getNumber("P Gain", 0);
@@ -68,6 +73,86 @@ public class Shooter{
         double min = SmartDashboard.getNumber("Min Output", -1);
         double target = SmartDashboard.getNumber("SetPoint", 5000);
 
+
+        if (p != kP) {
+
+            shooterPID.setP(p);
+            kP = p;
+
+        }
+
+        if (i != kI) {
+
+            shooterPID.setI(i);
+            kI = i;
+
+        }
+
+        if (d != kD) {
+
+            shooterPID.setD(d);
+            kD = d;
+
+        }
+
+        if (iz != kIz) {
+
+            shooterPID.setIZone(iz);
+            kIz = iz;
+
+        }
+
+        if (ff != kFF) {
+
+            shooterPID.setFF(ff); 
+            kFF = ff;
+
+        }
+
+        if (min != kMinOutput || max != kMaxOutput) {
+
+            shooterPID.setOutputRange(min, max);
+            kMinOutput = min;
+            kMaxOutput = max;
+
+        }
+
+        if (target != kMaxRPM) {
+
+            kMaxRPM = target;
+
+        }
+    
+        shooterPID.setReference(kMaxRPM, ControlType.kVelocity);
+
+        if (smartDashboardDisplay) {
+            
+            SmartDashboard.putNumber("P Gain", kP);
+            SmartDashboard.putNumber("I Gain", kI);
+            SmartDashboard.putNumber("D Gain", kD);
+            SmartDashboard.putNumber("I Zone", kIz);
+            SmartDashboard.putNumber("Feed Forward", kFF);
+            SmartDashboard.putNumber("Max Output", kMaxOutput);
+            SmartDashboard.putNumber("Min Output", kMinOutput);
+            SmartDashboard.putNumber("SetPoint", kMaxRPM);
+            SmartDashboard.putNumber("ProcessVariable", leftShooterEncoder.getVelocity());
+
+        }
+
+    }
+
+    public void setPIDCoefficients(boolean smartDashboardDisplay, double ff, double p, double i, double d, double rpm) {
+
+        if (smartDashboardDisplay) {
+            
+            SmartDashboard.putNumber("P Gain", p);
+            SmartDashboard.putNumber("I Gain", i);
+            SmartDashboard.putNumber("D Gain", d);
+            SmartDashboard.putNumber("Feed Forward", ff);
+            SmartDashboard.putNumber("SetPoint", rpm);
+
+        }
+
     }
     
         
@@ -76,10 +161,30 @@ public class Shooter{
      * @param shooterRightInversion Boolean to say whether or not right shooter motor is inverted
      * @param shooterLeftInversion Boolean to say whether or not right shooter motor is inverted
      */
-    public void setInversionStatus(boolean shooterRightInversion, boolean shooterLeftInversion) {
+    public void setInversionStatus (boolean shooterRightInversion, boolean shooterLeftInversion) {
 
         rightShooterMotor.setInverted(shooterRightInversion);
         leftShooterMotor.setInverted(shooterLeftInversion);
 
     } 
+
+    /**
+     * Stops shooter motors
+     */
+    public void stop () {
+
+        rightShooterMotor.set(0);
+        leftShooterMotor.set(0);
+
+    }
+
+    /**
+     * Resets shooter encoders
+     */
+    public void resetEncoders () {
+
+        rightShooterEncoder.setPosition(0);
+        leftShooterEncoder.setPosition(0);
+
+    }
 }

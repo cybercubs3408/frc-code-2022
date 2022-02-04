@@ -5,25 +5,29 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public class Intake {
     
-    TalonSRX intakeMotor;
+    TalonSRX intakeMotor, intakeArm;
 
     /**
      * Constructor class defining the motor for the robots intake system
      * @param intakeMotorID ID of the intake motor
+     * @param intakermID ID of the motor for the intake arm
      */
-    public Intake (int intakeMotorID) {
+    public Intake (int intakeMotorID, int intakeArmID) {
 
         intakeMotor = new TalonSRX(intakeMotorID);
+        intakeArm = new TalonSRX(intakeArmID);
 
     }
 
     /**
      * Method to set the inversion status of the intake motor
      * @param intakeMotorInverted Boolean for the inversion status of the intake motor
+     * @param intakeArmInverted Boolean for the inversion status of the intake arm motor
      */
-    public void setInversion (boolean intakeMotorInverted) {
+    public void setInversion (boolean intakeMotorInverted, boolean intakeArmInverted) {
 
         intakeMotor.setInverted(intakeMotorInverted);
+        intakeArm.setInverted(intakeArmInverted);
 
     }
 
@@ -44,6 +48,24 @@ public class Intake {
     public void intakeOut (double power2) {
 
         intakeMotor.set(ControlMode.PercentOutput, -Math.abs(power2));
+
+    }
+
+    /**
+     * Code to move the intake arm down
+     */
+    public void armDown () {
+
+        intakeArm.set(ControlMode.PercentOutput, .3);
+
+    }
+
+    /**
+     * Code to move the intake arm up
+     */
+    public void armUp () {
+
+        intakeArm.set(ControlMode.PercentOutput, -.3);
 
     }
 

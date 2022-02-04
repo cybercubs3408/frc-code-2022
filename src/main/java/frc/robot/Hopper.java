@@ -33,12 +33,11 @@ public class Hopper {
 
     /**
      * Method to control the intake of the hopper
-     * @param power Undefined power level for the intake of the hopper motors
+     * @param power Undefined power level for the intake of the front hopper motor
      */
     public void hopperIn (double power) {
 
         topHopperMotor.set(ControlMode.PercentOutput, Math.abs(power));
-        bottomHopperMotor.set(ControlMode.PercentOutput, Math.abs(power));
 
     }
     /**
@@ -48,7 +47,26 @@ public class Hopper {
     public void hopperOut (double power2) {
 
         topHopperMotor.set(ControlMode.PercentOutput, -Math.abs(power2));
-        bottomHopperMotor.set(ControlMode.PercentOutput, -Math.abs(power2));
+
+    }
+
+    /**
+     * Method to control the intake of the inner motor
+     * @param power Undefined intake power level of the inner motor
+     */
+    public void hopperShoot (double power) {
+
+        bottomHopperMotor.set(ControlMode.PercentOutput, Math.abs(power));
+
+    }
+
+    /**
+     * Method to control the outtake of the oute motor
+     * @param power Undefined outtake power level of the inner motor
+     */
+    public void hopperSpit (double power) {
+
+        bottomHopperMotor.set(ControlMode.PercentOutput, -Math.abs(power));
 
     }
 
