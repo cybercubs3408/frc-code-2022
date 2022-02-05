@@ -22,8 +22,8 @@ public class Shooter{
     /**
      * Constructor method for the shooter class
      * @param kP Proportional gain 
-     * @param kI Intrgral gain
-     * @param kD Derivitive(rate of change of something at a point) gain
+     * @param kI Integral gain
+     * @param kD Derivitive (rate of change of something at a point) gain
      * @param rightShooterID ID of right controller controlling shooter
      * @param leftShooterID ID of left controller controlling  shoort
      * @param Iz Integration zone of PID controller
@@ -167,6 +167,17 @@ public class Shooter{
         leftShooterMotor.setInverted(shooterLeftInversion);
 
     } 
+
+    /**
+     * Method to actually shoot the shooter using PID values read from Smart Dashboard
+     * @param smartDashboardDisplay Boolean on whether or not to display smartDashboard values
+     */
+    public void shoot (boolean smartDashboardDisplay) {
+
+        updatePIDCoefficients(smartDashboardDisplay);
+        SmartDashboard.putNumber("RPM", leftShooterEncoder.getVelocity());
+
+    }
 
     /**
      * Stops shooter motors
