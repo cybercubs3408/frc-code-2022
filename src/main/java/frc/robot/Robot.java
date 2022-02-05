@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   Hopper hopper = new Hopper(topHopperID, bottomHopperID);
   Drivetrain drivetrain = new Drivetrain(frontLeftID, frontRightID, backLeftID, backRightID);
   Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
-  Limelight limelight = new Limelight(limelightHeight, targetHeight, limelightAngle);
+  Limelight limelight = new Limelight(limelightHeight, 104.0, limelightAngle);
   Shooter shooter = new Shooter(kP, kI, kD);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
@@ -50,12 +50,21 @@ public class Robot extends TimedRobot {
   /** This function is run once each time the robot enters autonomous mode. */
   @Override
   public void autonomousInit() {
-    
+
+    drivetrain.stop();
+    drivetrain.resetEncoders();
+    limelight.updateLimelightVariables(true);
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+
+    drivetrain.prepareShoot(false, limelight);
+
+    double targetDistance = limelight.updateLimelightVariables(false);
+    drivetrain.autonomousDrive(targetDistance, 135.0);
 
   }
 
@@ -76,25 +85,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     
+    //Calls drivetrain drive method and drives based on pilot controller inputs
     drivetrain.drive(leftJoystick, rightJoystick);
 
-    //B button is pressed once --> arm up or down
-    if (XBOXController.getRawButtonPressed(1)) {
-
-      if (armUp) {
-
-        intake.armDown();
-        armUp = false;
-
-      }
-
-      else if (armUp == false) {
-
-        intake.armUp();
-        armUp = true;
-
-      }
-    }
+    //Calls intake moveArm method and moves arm up or down based on controller input
+    intake.moveArm(XBOXController);
 
     //L1 button is held --> spin intake
     if (XBOXController.getRawButton(4)) {

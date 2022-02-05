@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.Joystick;
+
 
 public class Intake {
     
@@ -53,19 +55,13 @@ public class Intake {
 
     /**
      * Code to move the intake arm down
+     * @param joystick Joystick ssociated with the power of the intake
+     * Move joystick to the left, arm goes down; move joystick right, arm goes up
      */
-    public void armDown () {
+    public void moveArm (Joystick joystick) {
 
-        intakeArm.set(ControlMode.PercentOutput, .3);
-
-    }
-
-    /**
-     * Code to move the intake arm up
-     */
-    public void armUp () {
-
-        intakeArm.set(ControlMode.PercentOutput, -.3);
+        double intakePower = joystick.getRawAxis(0);
+        intakeArm.set(ControlMode.PercentOutput, (.25 * intakePower));
 
     }
 

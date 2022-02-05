@@ -1,10 +1,8 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Drivetrain {
@@ -144,5 +142,26 @@ public class Drivetrain {
         }
 
         stop();
+    }
+
+    /**
+     * Code for autonomous driving of the robot
+     * While the robot is within the tarmac, drive off
+     * @param targetDistance Current distance between the robot and the target, in inches
+     * @param travelDistance Constant, set distance that the robot must travel to exit the starting , in inches
+     */
+    public void autonomousDrive (double targetDistance, double travelDistance) {
+
+        while (targetDistance > travelDistance) {
+
+            frontLeft.set(.5);
+            frontRight.set(.5);
+            backLeft.set(.5);
+            backRight.set(.5);
+
+        }
+
+        stop();
+
     }
 }

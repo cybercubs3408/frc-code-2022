@@ -18,7 +18,7 @@ public class Limelight {
      * Constructs a limelight object
      * @param limelightHeight Vertical distance between the limelight and the ground in inches
      * @param targetHeight Verticl distance between the target and the ground in inches
-     * @param limelightAngle Angle between the limelight and the ground (base of target?)
+     * @param limelightAngle Angle between the limelight and level (from limelight's height)
      */
     public Limelight (double limelightHeight, double targetHeight, double limelightAngle, double targetDistance) {
 
@@ -37,14 +37,15 @@ public class Limelight {
     /**
      * Periodically updates the limelight variables
      * @param smartDashboardDisplay Boolean to display whether or not to display smart dashboard values
+     * @return Returns the variable targetDistance for use in autonomous driving class
      */
-    public void updateLimelightVariables (Boolean smartDashboardDisplay) {
+    public double updateLimelightVariables (Boolean smartDashboardDisplay) {
 
         xOff = xOffEntry.getDouble(0.0);
         yOff = yOffEntry.getDouble(0.0);
         areaValue = areaValueEntry.getDouble(0.0);
         validity = validityEntry.getDouble(0.0);
-        targetDistance = (targetHeight - limelightHeight) / Math.tan((limelightAngle + yOff) * Math.PI / 180);
+        double targetDistance = (targetHeight - limelightHeight) / Math.tan((limelightAngle + yOff) * Math.PI / 180);
         
         if (smartDashboardDisplay) {
             SmartDashboard.putNumber("X Offset", xOff);
@@ -52,5 +53,8 @@ public class Limelight {
             SmartDashboard.putNumber("Area (Target Size)", areaValue);
             SmartDashboard.putNumber("Validity", validity);
         }
+
+        return targetDistance;
+
     }
 }
