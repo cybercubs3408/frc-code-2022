@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
  */
 public class Robot extends TimedRobot {
   
-  Intake intake = new Intake(intakeMotorID, intakeArmID);
-  Hopper hopper = new Hopper(topHopperID, bottomHopperID);
-  Drivetrain drivetrain = new Drivetrain(frontLeftID, frontRightID, backLeftID, backRightID);
-  Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
-  Limelight limelight = new Limelight(limelightHeight, 104.0, limelightAngle);
-  Shooter shooter = new Shooter(kP, kI, kD);
+  //Intake intake = new Intake(intakeMotorID, intakeArmID);
+  Hopper hopper = new Hopper(1, 2);
+  Drivetrain drivetrain = new Drivetrain(6, 7, 8, 9);
+  //Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
+  Limelight limelight = new Limelight(33.5, 104.0, 3.0);
+  //Shooter shooter = new Shooter(kP, kI, kD);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
   Joystick XBOXController = new Joystick(2);
@@ -39,11 +39,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    intake.setInversion(intakeMotorInverted, intakeArmInverted);
-    hopper.setInversion(topHopperInverted, bottomHopperInverted);
-    drivetrain.setInversion(frontLeftInvert, frontRightInvert, backLeftInvert, backRightInvert);
-    lift.setInversionStatus(inLeftLiftInvert, outLeftLiftInvert, inRightLiftInvert, outRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
-    shooter.setInversionStatus(shooterRightInversion, shooterLeftInversion);
+    //intake.setInversion(intakeMotorInverted, intakeArmInverted);
+    hopper.setInversion(false, true);
+    drivetrain.setInversion(false, false, true, true);
+    //lift.setInversionStatus(inLeftLiftInvert, outLeftLiftInvert, inRightLiftInvert, outRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
+    //shooter.setInversionStatus(shooterRightInversion, shooterLeftInversion);
 
   }
 
@@ -74,8 +74,8 @@ public class Robot extends TimedRobot {
 
     drivetrain.stop();
     drivetrain.resetEncoders();
-    shooter.stop();
-    shooter.resetEncoders();
+    //shooter.stop();
+    //shooter.resetEncoders();
 
   }
 
@@ -89,31 +89,35 @@ public class Robot extends TimedRobot {
     drivetrain.drive(leftJoystick, rightJoystick);
 
     //Calls intake moveArm method and moves arm up or down based on controller input
-    intake.moveArm(XBOXController);
+    //intake.moveArm(XBOXController);
 
     //L1 button is held --> spin intake
-    if (XBOXController.getRawButton(4)) {
+    if (XBOXController.getRawButton(5)) {
 
-      intake.intakeIn(.5);
+      //intake.intakeIn(.5);
 
     }
 
     //R1 button is held --> spin outtake
-    if (XBOXController.getRawButton(5)) {
+    if (XBOXController.getRawButton(6)) {
 
-      intake.intakeIn(.5);
+      //intake.intakeIn(.5);
 
     }
 
     //left joystick trigger --> first hopper motor in
-    if (leftJoystick.getRawButton(0)) {
+    if (leftJoystick.getRawButton(1)) {
 
       hopper.hopperIn(.3);
+
+      if (leftJoystick.getRawButtonReleased(1))
+
+        hopper.stop();
 
     }
 
     //right jostick trigger --> beeg shoot button
-    if (rightJoystick.getRawButton(0)) {
+    if (rightJoystick.getRawButton(1)) {
 
       drivetrain.prepareShoot(true, limelight);
       hopper.hopperIn(.3);
@@ -122,17 +126,27 @@ public class Robot extends TimedRobot {
     }
     
     //X button on XBOX Controller --> outer hopper outtake
-    if (XBOXController.getRawButton(2)) {
+    if (XBOXController.getRawButton(3)) {
 
       hopper.hopperOut(.3);
 
+      if (XBOXController.getRawButtonReleased(3)) {
+
+        hopper.stop();
+
+      }
     }
 
     //Y button on XBOX Controller --> inner hopper motor outtakes
-    if (XBOXController.getRawButton(3)) {
+    if (XBOXController.getRawButton(4)) {
 
       hopper.hopperSpit(.3);
 
+      if (XBOXController.getRawButtonReleased(4)) {
+
+        hopper.stop();
+
+      }
     }
   }
 

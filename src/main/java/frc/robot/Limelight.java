@@ -20,7 +20,7 @@ public class Limelight {
      * @param targetHeight Verticl distance between the target and the ground in inches
      * @param limelightAngle Angle between the limelight and level (from limelight's height)
      */
-    public Limelight (double limelightHeight, double targetHeight, double limelightAngle, double targetDistance) {
+    public Limelight (double limelightHeight, double targetHeight, double limelightAngle) {
 
         this.limelightHeight = limelightHeight;
         this.targetHeight = targetHeight;
