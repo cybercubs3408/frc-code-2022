@@ -110,9 +110,10 @@ public class Robot extends TimedRobot {
 
       hopper.hopperIn(.3);
 
-      if (leftJoystick.getRawButtonReleased(1))
+    }
+    else if (leftJoystick.getRawButtonReleased(1)) {
 
-        hopper.stop();
+      hopper.stop();
 
     }
 
@@ -122,6 +123,7 @@ public class Robot extends TimedRobot {
       drivetrain.prepareShoot(true, limelight);
       hopper.hopperIn(.3);
       hopper.hopperShoot(.3);
+      //shooter.shoot(true, limelight);
 
     }
     
@@ -130,24 +132,27 @@ public class Robot extends TimedRobot {
 
       hopper.hopperOut(.3);
 
-      if (XBOXController.getRawButtonReleased(3)) {
-
-        hopper.stop();
-
-      }
+      
     }
+    else if (XBOXController.getRawButtonReleased(3)) {
+
+      hopper.stop();
+
+    }
+
 
     //Y button on XBOX Controller --> inner hopper motor outtakes
     if (XBOXController.getRawButton(4)) {
 
       hopper.hopperSpit(.3);
 
-      if (XBOXController.getRawButtonReleased(4)) {
+      }
+      
+      else if (XBOXController.getRawButtonReleased(4)) {
 
         hopper.stop();
 
       }
-    }
   }
 
   /** This function is called once each time the robot enters test mode. */
