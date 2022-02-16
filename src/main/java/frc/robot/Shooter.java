@@ -19,6 +19,27 @@ public class Shooter{
     RelativeEncoder rightShooterEncoder, leftShooterEncoder;
 
 
+    //Minimum distance in inches that the shooter can shoot from
+    final static double xMin = minimumDistance;
+    //Corrsponding RPM value with the minimum distance
+    final static double yMin = minimumRPM;
+
+    //First preset distance value in inches
+    final static double x1 = firstDistance;
+    //Corresponding RPM value for distance #1
+    final static double y1 = firstRPM;
+
+    //Second preset distance value in inches
+    final static double x2 = secondDistance;
+    //Corresponding RPM value for distance #2
+    final static double y2 = secondRPM;
+
+    //Maximum distance in inches that the shooter can shoot from
+    final static double xMax = maximumDistance;
+    //Corrseponding RPM value with that distance
+    final static double yMax = maximumRPM;
+
+
     /**
      * Constructor method for the shooter class
      * @param kP Proportional gain 
@@ -169,11 +190,45 @@ public class Shooter{
     } 
 
     /**
+     * Method that will take the current distance the robot is from the target and find the necessary RPM
+     * @param targetDistance The distance between the limelight and the target
+     * @return RPM to be input into set PID coefficients in shooter.shoot
+     */
+    public double shooterRanges(double targetDistance) {
+
+        double rpm;
+
+        if (targetDistance > xMin && targetDistance < x1) {
+
+            rpm = xMin + (targetDistance - xMin) * (y1 - yMin) / (x1 - xMin);
+
+        }
+
+        else if (targetDistance > x1 && targetDistance < x2) {
+
+            rpm = x1 + (targetDistance - x1) * (y2 - y1) / (x2 - x1);
+
+        }
+
+        else if (targetDistance > x2 && targetDistance < xMax) {
+
+            rpm = x2 + (targetDistance - x2) * (yMax - y2) / (xMax - x2);
+
+        }
+
+        return rpm;
+    }
+
+    /**
      * Method to actually shoot the shooter using PID values read from Smart Dashboard
      * @param smartDashboardDisplay Boolean on whether or not to display smartDashboard values
+     * @param limelight The limelight on the robot, lets limelight function be used in shooter class
      */
-    public void shoot (boolean smartDashboardDisplay) {
+    public void shoot (boolean smartDashboardDisplay, Limelight limelight) {
 
+        double targetDistance = limelight.updateLimelightVariables(smartDashboardDisplay);
+        double rpm = shooterRanges(targetDistance);
+        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, rpm);
         updatePIDCoefficients(smartDashboardDisplay);
         SmartDashboard.putNumber("RPM", leftShooterEncoder.getVelocity());
 

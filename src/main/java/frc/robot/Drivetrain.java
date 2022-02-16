@@ -152,12 +152,12 @@ public class Drivetrain {
      */
     public void autonomousDrive (double targetDistance, double travelDistance) {
 
-        while (targetDistance > travelDistance) {
+        while (travelDistance > targetDistance) {
 
-            frontLeft.set(.5);
-            frontRight.set(.5);
-            backLeft.set(.5);
-            backRight.set(.5);
+            frontLeft.set(-.5);
+            frontRight.set(-.5);
+            backLeft.set(-.5);
+            backRight.set(-.5);
 
         }
 
