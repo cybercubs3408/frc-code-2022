@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,7 +23,7 @@ public class Robot extends TimedRobot {
   
   //Intake intake = new Intake(intakeMotorID, intakeArmID);
   Hopper hopper = new Hopper(1, 2);
-  Drivetrain drivetrain = new Drivetrain(6, 7, 8, 9);
+  Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
   //Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
   Limelight limelight = new Limelight(33.5, 104.0, 3.0);
   //Shooter shooter = new Shooter(kP, kI, kD);
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
     
     //intake.setInversion(intakeMotorInverted, intakeArmInverted);
     hopper.setInversion(false, true);
-    drivetrain.setInversion(false, false, true, true);
+    drivetrain.setInversion(false, true, false, true);
     //lift.setInversionStatus(inLeftLiftInvert, outLeftLiftInvert, inRightLiftInvert, outRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
     //shooter.setInversionStatus(shooterRightInversion, shooterLeftInversion);
 
@@ -76,6 +77,9 @@ public class Robot extends TimedRobot {
     drivetrain.resetEncoders();
     //shooter.stop();
     //shooter.resetEncoders();
+
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
 
   }
 
