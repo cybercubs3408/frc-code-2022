@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
 
     }
 
-    //right jostick trigger --> beeg shoot button
+    //right joystick trigger held --> aims robot and starts spinning flyehweel
     if (rightJoystick.getRawButtonPressed(1)) {
 
       drivetrain.prepareShoot(true, limelight);
@@ -131,6 +131,7 @@ public class Robot extends TimedRobot {
 
     }
 
+    //top, middle button on right joystick held --> intake to shooter (use after aiming/ready to shoot)
     if (rightJoystick.getRawButton(2)) {
 
       hopper.hopperIn(.2);
