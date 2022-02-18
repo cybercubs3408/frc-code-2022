@@ -82,10 +82,10 @@ public class Drivetrain {
 
         // Alter decimal being multiplied to change the power as needed
 
-        frontLeft.set(0.75 * leftPower);
-        backLeft.set(0.75 * leftPower);
-        frontRight.set(0.75 * rightPower);
-        backRight.set(0.75 * rightPower);
+        frontLeft.set(0.75 * rightPower);
+        backLeft.set(0.75 * rightPower);
+        frontRight.set(0.75 * leftPower);
+        backRight.set(0.75 * leftPower);
     }
 
     /**
@@ -123,17 +123,17 @@ public class Drivetrain {
         
         limelight.updateLimelightVariables(smartDashboardDisplay);
 
-        if (Math.abs(limelight.xOff) > 0.5) {
+        while (Math.abs(limelight.xOff) > 0.3) {
 
             limelight.updateLimelightVariables(smartDashboardDisplay);
 
-            if (limelight.xOff > 0) {
+            if (limelight.xOff < 0) {
 
                 autoAim("left", 0.1);
 
             }
 
-            else if (limelight.xOff < 0) {
+            else if (limelight.xOff > 0) {
 
                 autoAim("right", 0.1);
 

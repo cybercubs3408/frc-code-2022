@@ -31,6 +31,8 @@ public class Robot extends TimedRobot {
   Joystick rightJoystick = new Joystick(1);
   Joystick XBOXController = new Joystick(2);
 
+  
+
   Boolean armUp = true;
 
   /**
@@ -122,15 +124,28 @@ public class Robot extends TimedRobot {
     }
 
     //right jostick trigger --> beeg shoot button
-    if (rightJoystick.getRawButton(1)) {
+    if (rightJoystick.getRawButtonPressed(1)) {
 
       drivetrain.prepareShoot(true, limelight);
-      hopper.hopperIn(.3);
-      hopper.hopperShoot(.3);
       //shooter.shoot(true, limelight);
 
     }
+
+    if (rightJoystick.getRawButton(2)) {
+
+      hopper.hopperIn(.2);
+      hopper.hopperShoot(.3);
+
+    }
+
+    else if (rightJoystick.getRawButtonReleased(2)) {
+
+      hopper.stop();
+      //shooter.stop();
+
+    }
     
+
     //X button on XBOX Controller --> outer hopper outtake
     if (XBOXController.getRawButton(3)) {
 
