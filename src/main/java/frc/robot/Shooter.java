@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.CANSparkMax.ControlType;
 
-/** 
+ 
 public class Shooter{
 
     double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, kMaxRPM;
@@ -19,42 +19,30 @@ public class Shooter{
     RelativeEncoder rightShooterEncoder, leftShooterEncoder;
 
 
-    //Minimum distance in inches that the shooter can shoot from
-    final static double xMin = minimumDistance;
-    //Corrsponding RPM value with the minimum distance
-    final static double yMin = minimumRPM;
+    //Index, undefined variable that will be used to iterate through arrays
+    int index;
+    //Variable for total length of arrays, currently set to 10 (so 11 array values)
+    int tableList = 10;
 
-    //First preset distance value in inches
-    final static double x1 = firstDistance;
-    //Corresponding RPM value for distance #1
-    final static double y1 = firstRPM;
-
-    //Second preset distance value in inches
-    final static double x2 = secondDistance;
-    //Corresponding RPM value for distance #2
-    final static double y2 = secondRPM;
-
-    //Maximum distance in inches that the shooter can shoot from
-    final static double xMax = maximumDistance;
-    //Corrseponding RPM value with that distance
-    final static double yMax = maximumRPM;
-
+    //Arrays for shooter input (distance) nd corresponding output (shooter power)
+    //MAKE SURE VALUES ARE PUT IN IN THE SAME ORDER OR IT WILL NOT WORK
+    double[] arrayInput = {};
+    double[] arrayOutput = {};
 
     /**
      * Constructor method for the shooter class
      * @param kP Proportional gain 
      * @param kI Integral gain
-     * @param kD Derivitive (rate of change of something at a point) gain
+     * @param kD Derivitive gain (not used)
      * @param rightShooterID ID of right controller controlling shooter
      * @param leftShooterID ID of left controller controlling  shoort
      * @param Iz Integration zone of PID controller
      * @param FF Feedforward value of PID controller
      * @param maxOutput Maximum output of PID Controller
      * @param minOutput Minimum output of PID controller
-     *
+     */
     public Shooter(double kP, double kI, double kD, int rightShooterID, int leftShooterID, double Iz, double FF, double maxOutput, double minOutput, double maxRPM) {
 
-        PIDController pid = new PIDController(kP, kI, kD);
         rightShooterMotor = new CANSparkMax(rightShooterID, MotorType.kBrushless);
         leftShooterMotor = new CANSparkMax(leftShooterID, MotorType.kBrushless);
         
@@ -82,7 +70,7 @@ public class Shooter{
     /**
      * Updates the PID coefficients 
      * @param smartDashboardDisplay Boolean on whether or not to display smart daashboard values
-     *
+     */
     public void updatePIDCoefficients(boolean smartDashboardDisplay) {
 
         double p = SmartDashboard.getNumber("P Gain", 0);
@@ -162,6 +150,15 @@ public class Shooter{
 
     }
 
+    /**
+     * Method to redefine the PID coefficients and potentially display them to smartdashboard
+     * @param smartDashboardDisplay Boolean as to whether or not to display to smart dashboard
+     * @param ff Feed Forward value
+     * @param p Proportional input variable
+     * @param i Integral input variable
+     * @param d Derivtive input variable (not used)
+     * @param rpm RPM value for the shooter to reach
+     */
     public void setPIDCoefficients(boolean smartDashboardDisplay, double ff, double p, double i, double d, double rpm) {
 
         if (smartDashboardDisplay) {
@@ -175,13 +172,12 @@ public class Shooter{
         }
 
     }
-    
-        
+         
     /**
      * Method to set the inversions of the shooter motors
      * @param shooterRightInversion Boolean to say whether or not right shooter motor is inverted
      * @param shooterLeftInversion Boolean to say whether or not right shooter motor is inverted
-     *
+     */
     public void setInversionStatus (boolean shooterRightInversion, boolean shooterLeftInversion) {
 
         rightShooterMotor.setInverted(shooterRightInversion);
@@ -192,38 +188,39 @@ public class Shooter{
     /**
      * Method that will take the current distance the robot is from the target and find the necessary RPM
      * @param targetDistance The distance between the limelight and the target
-     * @return RPM to be input into set PID coefficients in shooter.shoot
-     *
+     * @return RPM to be input into setPIDcoefficients in shooter.shoot
+     */
     public double shooterRanges(double targetDistance) {
 
+        //defines rpm variable to be output and defines the index variable as 0
         double rpm;
+        index = 0;
 
-        if (targetDistance > xMin && targetDistance < x1) {
+        //iterates through the array of distances and breaks the loop once the distance is less than an input value
+        while (targetDistance > arrayInput[index] && index < tableList) {
 
-            rpm = xMin + (targetDistance - xMin) * (y1 - yMin) / (x1 - xMin);
+            index ++;
+        
+        }
+
+        //Fail-safe to ensure that if the target distance is less than the minimum value the code doesnt break
+        if (index == 0) {
+
+            index = 1;
 
         }
 
-        else if (targetDistance > x1 && targetDistance < x2) {
-
-            rpm = x1 + (targetDistance - x1) * (y2 - y1) / (x2 - x1);
-
-        }
-
-        else if (targetDistance > x2 && targetDistance < xMax) {
-
-            rpm = x2 + (targetDistance - x2) * (yMax - y2) / (xMax - x2);
-
-        }
-
+        //plugs the corresponding inputs and outputs into the equation for rpm output
+        rpm = arrayInput[(index - 1)] + (targetDistance - arrayInput[(index - 1)]) * (arrayOutput[index] - arrayOutput[(index - 1)]) / (arrayInput[index] - arrayInput[(index - 1)]);
         return rpm;
+
     }
 
     /**
      * Method to actually shoot the shooter using PID values read from Smart Dashboard
      * @param smartDashboardDisplay Boolean on whether or not to display smartDashboard values
      * @param limelight The limelight on the robot, lets limelight function be used in shooter class
-     *
+     */
     public void shoot (boolean smartDashboardDisplay, Limelight limelight) {
 
         double targetDistance = limelight.updateLimelightVariables(smartDashboardDisplay);
@@ -236,7 +233,7 @@ public class Shooter{
 
     /**
      * Stops shooter motors
-     *
+     */
     public void stop () {
 
         rightShooterMotor.set(0);
@@ -246,7 +243,7 @@ public class Shooter{
 
     /**
      * Resets shooter encoders
-     *
+     */
     public void resetEncoders () {
 
         rightShooterEncoder.setPosition(0);
@@ -254,4 +251,3 @@ public class Shooter{
 
     }
 }
-*/
