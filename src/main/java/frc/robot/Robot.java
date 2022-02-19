@@ -65,10 +65,10 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     
     double targetDistance = limelight.updateLimelightVariables(false);
-    drivetrain.autonomousDrive(targetDistance, 135.0);
+    drivetrain.autonomousDrive(targetDistance, 150.0);
 
     //Code for autonomous shooting, should start after driving backward; test if shooter gets to speed before hopper starts
-    if (targetDistance >= 135.0) {
+    if (targetDistance >= 150.0) {
       //shooter.shoot(true, limelight);
       drivetrain.prepareShoot(false, limelight);
 

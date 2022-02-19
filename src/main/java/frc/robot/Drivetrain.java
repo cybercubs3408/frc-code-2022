@@ -123,19 +123,19 @@ public class Drivetrain {
         
         limelight.updateLimelightVariables(smartDashboardDisplay);
 
-        while (Math.abs(limelight.xOff) > 0.3) {
+        while (Math.abs(limelight.xOff) > 0.5) {
 
             limelight.updateLimelightVariables(smartDashboardDisplay);
 
             if (limelight.xOff < 0) {
 
-                autoAim("left", 0.1);
+                autoAim("left", 0.09);
 
             }
 
             else if (limelight.xOff > 0) {
 
-                autoAim("right", 0.1);
+                autoAim("right", 0.09);
 
             }
 
@@ -154,10 +154,10 @@ public class Drivetrain {
 
         while (travelDistance > targetDistance) {
 
-            frontLeft.set(-.5);
-            frontRight.set(-.5);
-            backLeft.set(-.5);
-            backRight.set(-.5);
+            frontLeft.set(-0.3);
+            frontRight.set(-0.3);
+            backLeft.set(-0.3);
+            backRight.set(-0.3);
 
         }
 
