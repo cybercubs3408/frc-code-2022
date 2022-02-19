@@ -192,22 +192,15 @@ public class Shooter{
      */
     public double shooterRanges(double targetDistance) {
 
-        //defines rpm variable to be output and defines the index variable as 0
+        //defines rpm variable to be output and defines the index variable as 1 to start iteration
         double rpm;
-        index = 0;
+        index = 1;
 
         //iterates through the array of distances and breaks the loop once the distance is less than an input value
-        while (targetDistance > arrayInput[index] && index < tableList) {
+        while (targetDistance > arrayInput[(index - 1)] && (index - 1) < tableList) {
 
             index ++;
         
-        }
-
-        //Fail-safe to ensure that if the target distance is less than the minimum value the code doesnt break
-        if (index == 0) {
-
-            index = 1;
-
         }
 
         //plugs the corresponding inputs and outputs into the equation for rpm output

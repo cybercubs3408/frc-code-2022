@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
   //Intake intake = new Intake(intakeMotorID, intakeArmID);
   Hopper hopper = new Hopper(1, 2);
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
-  //Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftLiftID, outRightLiftID, outLeftRotateID, outRightRotateID);
+  //Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftRotateID, outRightRotateID);
   Limelight limelight = new Limelight(33.5, 104.0, 3.0);
   //Shooter shooter = new Shooter(kP, kI, kD);
   Joystick leftJoystick = new Joystick(0);
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     //intake.setInversion(intakeMotorInverted, intakeArmInverted);
     hopper.setInversion(false, true);
     drivetrain.setInversion(false, true, false, true);
-    //lift.setInversionStatus(inLeftLiftInvert, outLeftLiftInvert, inRightLiftInvert, outRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
+    //lift.setInversionStatus(inLeftLiftInvert, inRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
     //shooter.setInversionStatus(shooterRightInversion, shooterLeftInversion);
 
   }
