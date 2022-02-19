@@ -194,13 +194,20 @@ public class Shooter{
 
         //defines rpm variable to be output and defines the index variable as 1 to start iteration
         double rpm;
-        index = 1;
+        index = 0;
 
         //iterates through the array of distances and breaks the loop once the distance is less than an input value
-        while (targetDistance > arrayInput[(index - 1)] && (index - 1) < tableList) {
+        while (targetDistance > arrayInput[index] && index < tableList) {
 
             index ++;
         
+        }
+
+        //Fail-safe to prevent code from breaking (stops potential 0-1 below)
+        if (index == 0) {
+
+            index = 1;
+
         }
 
         //plugs the corresponding inputs and outputs into the equation for rpm output
