@@ -232,6 +232,32 @@ public class Shooter{
     }
 
     /**
+     * Method to actually shoot the shooter using PID values during the autonomous period
+     * @param smartDashboardDisplay Boolean on whether or not to display smartDashboard values
+     * @param limelight The limelight on the robot, lets limelight function be used in shooter class
+     */
+    public boolean autoShoot (boolean smartDashboardDisplay, Limelight limelight) {
+
+        double targetDistance = limelight.updateLimelightVariables(smartDashboardDisplay);
+        double rpm = shooterRanges(targetDistance);
+        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, rpm);
+        updatePIDCoefficients(smartDashboardDisplay);
+        SmartDashboard.putNumber("RPM", leftShooterEncoder.getVelocity());
+
+        if (leftShooterEncoder.getVelocity() == rpm) {
+
+            return true;
+
+        }
+
+        else {
+
+            return false;
+
+        }
+    }
+
+    /**
      * Stops shooter motors
      */
     public void stop () {

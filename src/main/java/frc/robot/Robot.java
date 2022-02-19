@@ -63,12 +63,23 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-
-    drivetrain.prepareShoot(false, limelight);
-
+    
     double targetDistance = limelight.updateLimelightVariables(false);
     drivetrain.autonomousDrive(targetDistance, 135.0);
 
+    //Code for autonomous shooting, should start after driving backward; test if shooter gets to speed before hopper starts
+    if (targetDistance >= 135.0) {
+      //shooter.shoot(true, limelight);
+      drivetrain.prepareShoot(false, limelight);
+
+      /**if (shooter.autoShoot){ //should work for autonomous period shooting
+       * 
+      hopper.hopperIn(.2);
+      hopper.hopperShoot(.2);
+
+      }
+      */
+    }
   }
 
   /** This function is called once each time the robot enters teleoperated mode. */
@@ -98,21 +109,31 @@ public class Robot extends TimedRobot {
     //intake.moveArm(XBOXController);
 
     //L1 button is held --> spin intake
-    if (XBOXController.getRawButton(5)) {
+    if (XBOXController.getRawButtonPressed(5)) {
 
       //intake.intakeIn(.5);
+
+    }
+    else if (XBOXController.getRawButtonReleased(5)){
+
+      //intake.stop();
 
     }
 
     //R1 button is held --> spin outtake
-    if (XBOXController.getRawButton(6)) {
+    if (XBOXController.getRawButtonPressed(6)) {
 
       //intake.intakeIn(.5);
 
     }
+    else if (XBOXController.getRawButtonReleased(6)){
 
-    //left joystick trigger --> first hopper motor in
-    if (leftJoystick.getRawButton(1)) {
+      //intake.stop();
+
+    }
+
+    //left joystick trigger held--> first hopper motor in
+    if (leftJoystick.getRawButtonPressed(1)) {
 
       hopper.hopperIn(.3);
 
@@ -168,7 +189,7 @@ public class Robot extends TimedRobot {
 
       }
       
-      else if (XBOXController.getRawButtonReleased(4)) {
+    else if (XBOXController.getRawButtonReleased(4)) {
 
         hopper.stop();
 
