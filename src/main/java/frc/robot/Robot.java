@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
       //shooter.shoot(true, limelight);
       drivetrain.prepareShoot(false, limelight);
 
-      /**if (shooter.autoShoot){ //should work for autonomous period shooting
+      /**if (shooter.autoShoot() == true){ //should work for autonomous period shooting
        * 
       hopper.hopperIn(.2);
       hopper.hopperShoot(.2);
@@ -187,13 +187,38 @@ public class Robot extends TimedRobot {
 
       hopper.hopperSpit(.3);
 
-      }
+    }
       
     else if (XBOXController.getRawButtonReleased(4)) {
 
         hopper.stop();
 
-      }
+    }
+
+    //For all .getPOV's make sure to test if it is only while the button is held or not
+    if (XBOXController.getPOV() == 0) {
+
+      //lift.inLiftUp(.2);
+
+    }
+
+    if (XBOXController.getPOV() == 180) {
+
+      //lift.inLiftDown(.2);
+
+    }
+
+    if (XBOXController.getPOV() == 90) {
+
+      //lift.rotateLiftClock(.2);
+
+    }
+
+    if (XBOXController.getPOV() == 270) {
+
+      //lift.rotateLiftCntrClock(.2);
+
+    }
   }
 
   /** This function is called once each time the robot enters test mode. */

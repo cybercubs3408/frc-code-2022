@@ -60,7 +60,7 @@ public class Intake {
      */
     public void moveArm (Joystick joystick) {
 
-        double intakePower = joystick.getRawAxis(0);
+        double intakePower = joystick.getRawAxis(1);
         intakeArm.set(ControlMode.PercentOutput, (.25 * intakePower));
 
     }
