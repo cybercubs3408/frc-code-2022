@@ -54,14 +54,12 @@ public class Intake {
     }
 
     /**
-     * Code to move the intake arm down
-     * @param joystick Joystick ssociated with the power of the intake
-     * Move joystick to the left, arm goes down; move joystick right, arm goes up
+     * Code to move the intake arm up or down
+     * @param intakePower Inputted power, based on which button is input
      */
-    public void moveArm (Joystick joystick) {
+    public void moveArm (double intakePower) {
 
-        double intakePower = joystick.getRawAxis(1);
-        intakeArm.set(ControlMode.PercentOutput, (.25 * intakePower));
+        intakeArm.set(ControlMode.PercentOutput, intakePower);
 
     }
 

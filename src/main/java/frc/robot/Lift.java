@@ -44,46 +44,28 @@ public class Lift {
     }
 
     /** 
-     * Moves the inner lift up
-     * @param power The unspecified power needed to move the hopper up
+     * Moves the lift based on joystick input
+     * @param joystick Input joystick to read for power of the lift; left joystick on XBOX controller
+     * Move joystick up or down to move lift up or down
      */
-    public void inLiftUp(double power) {
+    public void moveLift(Joystick joystick) {
 
+        double power = (.3 * joystick.getRawAxis(1));
         inLeftLift.set(ControlMode.PercentOutput, Math.abs(power));
         inRightLift.set(ControlMode.PercentOutput, Math.abs(power));
 
     }
 
     /**
-     * Moves the inner lift down 
-     * @param power The unspecificed power (equal to moving up) to move the hopper down
+     * Rotates the lift arm based on joystick input
+     * @param joystick Input joystick to read for power of the rotating arm; right joystick on XBOX controller
+     * Move right joystick right for clockwise rotation and left for counter clockwise
      */
-    public void inLiftDown(double power) {
+    public void rotateLift(Joystick joystick) {
 
-        inLeftLift.set(ControlMode.PercentOutput, -Math.abs(power));
-        inRightLift.set(ControlMode.PercentOutput,-Math.abs(power));
-
-    }
-
-    /**
-     * Rotates the outer lift clockwise
-     * @param power3 The unspecified power used to rotate the outer lift
-     */
-    public void rotateLiftClock(double power3) {
-
-        outLeftRotate.set(ControlMode.PercentOutput, Math.abs(power3));
-        outRightRotate.set(ControlMode.PercentOutput, Math.abs(power3));
-
-    }
-
-    /**
-     * Rotates the outer lift counter clockwise
-     * @param power3 The unspecified power used to rotate the outer lift in negative direction
-     */
-    public void rotateLiftCntrClock(double power3){
-        
-        outLeftRotate.set(ControlMode.PercentOutput, -Math.abs(power3));
-        outRightRotate.set(ControlMode.PercentOutput, -Math.abs(power3));
+        double power = (.3 * joystick.getRawAxis(4));
+        outLeftRotate.set(ControlMode.PercentOutput, Math.abs(power));
+        outRightRotate.set(ControlMode.PercentOutput, Math.abs(power));
 
     }
 

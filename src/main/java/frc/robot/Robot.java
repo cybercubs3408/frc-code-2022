@@ -105,8 +105,11 @@ public class Robot extends TimedRobot {
     //Calls drivetrain drive method and drives based on pilot controller inputs
     drivetrain.drive(leftJoystick, rightJoystick);
 
-    //Calls intake moveArm method and moves arm up or down based on controller input
-    //intake.moveArm(XBOXController);
+    //Calls lift rotateLift method and rotates arm based on right joystick input; left = counter clockwise, right = clockwise
+    //lift.rotateLift(XBOXJoystick);
+
+    //Calls lift moveLift method and moves lift up or down based on left XBOX joystick input; up = up, down = down on lift
+    //lift.moveLift(XBOXJoystick);
 
     //L1 button is held --> spin intake
     if (XBOXController.getRawButtonPressed(5)) {
@@ -198,25 +201,13 @@ public class Robot extends TimedRobot {
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      //lift.inLiftUp(.2);
+      //intake.moveArm(.25);
 
     }
 
     if (XBOXController.getPOV() == 180) {
 
-      //lift.inLiftDown(.2);
-
-    }
-
-    if (XBOXController.getPOV() == 90) {
-
-      //lift.rotateLiftClock(.2);
-
-    }
-
-    if (XBOXController.getPOV() == 270) {
-
-      //lift.rotateLiftCntrClock(.2);
+      //intake.moveArm(-.25);
 
     }
   }
