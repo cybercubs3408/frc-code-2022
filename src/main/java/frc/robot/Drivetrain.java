@@ -82,10 +82,10 @@ public class Drivetrain {
 
         // Alter decimal being multiplied to change the power as needed
 
-        frontLeft.set(0.75 * rightPower);
-        backLeft.set(0.75 * rightPower);
-        frontRight.set(0.75 * leftPower);
-        backRight.set(0.75 * leftPower);
+        frontLeft.set(0.75 * leftPower);
+        backLeft.set(0.75 * leftPower);
+        frontRight.set(0.75 * rightPower);
+        backRight.set(0.75 * rightPower);
     }
 
     /**
