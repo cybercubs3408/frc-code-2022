@@ -22,11 +22,11 @@ import com.revrobotics.CANSparkMax;
 public class Robot extends TimedRobot {
   
   //Intake intake = new Intake(intakeMotorID, intakeArmID);
-  //Hopper hopper = new Hopper(1, 2);
+  //Hopper hopper = new Hopper(topHopperID, bottomHopperID);
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
-  //Lift lift = new Lift(inLeftLiftID, inRIghtLiftID, outLeftRotateID, outRightRotateID);
+  //Lift lift = new Lift(inLeftLiftID, inRightLiftID, 2, 3);
   //Limelight limelight = new Limelight(33.5, 104.0, 3.0);
-  //Shooter shooter = new Shooter(kP, kI, kD);
+  Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
   Joystick XBOXController = new Joystick(2);

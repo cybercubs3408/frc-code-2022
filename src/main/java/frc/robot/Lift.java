@@ -2,12 +2,14 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Lift {
     
-    TalonSRX inLeftLift, inRightLift, outLeftRotate, outRightRotate;
+    TalonSRX inLeftLift, inRightLift;
+    CANSparkMax outLeftRotate, outRightRotate;
     
     /**
      * Constructs a Lift Object in the new robot class
@@ -21,8 +23,8 @@ public class Lift {
 
         inLeftLift = new TalonSRX(inLeftLiftID);
         inRightLift = new TalonSRX(inRIghtLiftID);
-        outLeftRotate = new TalonSRX(outLeftRotateID);
-        outRightRotate = new TalonSRX(outRightRotateID);
+        outLeftRotate = new CANSparkMax(outLeftRotateID, MotorType.kBrushless);
+        outRightRotate = new CANSparkMax(outRightRotateID, MotorType.kBrushless);
 
     } 
 
@@ -64,8 +66,8 @@ public class Lift {
     public void rotateLift(Joystick joystick) {
 
         double power = (.3 * joystick.getRawAxis(4));
-        outLeftRotate.set(ControlMode.PercentOutput, Math.abs(power));
-        outRightRotate.set(ControlMode.PercentOutput, Math.abs(power));
+        outLeftRotate.set(Math.abs(power));
+        outRightRotate.set(Math.abs(power));
 
     }
 
@@ -76,8 +78,8 @@ public class Lift {
 
         inLeftLift.set(ControlMode.PercentOutput, 0);
         inRightLift.set(ControlMode.PercentOutput, 0);
-        outLeftRotate.set(ControlMode.PercentOutput, 0);
-        outRightRotate.set(ControlMode.PercentOutput, 0);
+        outLeftRotate.set(0);
+        outRightRotate.set(0);
         
     }
 }
