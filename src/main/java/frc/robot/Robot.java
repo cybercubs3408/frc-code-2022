@@ -21,20 +21,17 @@ import com.revrobotics.CANSparkMax;
  */
 public class Robot extends TimedRobot {
   
-  //Intake intake = new Intake(intakeMotorID, intakeArmID);
-  //Hopper hopper = new Hopper(topHopperID, bottomHopperID);
+  Intake intake = new Intake(2, 1);
+  //Hopper hopper = new Hopper(4, 3);
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
-  //Lift lift = new Lift(inLeftLiftID, inRightLiftID, 2, 3);
-  //Limelight limelight = new Limelight(33.5, 104.0, 3.0);
-  Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
+  //Lift lift = new Lift(6, 5, 2, 3);
+  //Limelight limelight = new Limelight(LimelightHeight), 104.0, LimelightAngle);
+  //Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
   Joystick XBOXController = new Joystick(2);
 
   
-
-  Boolean armUp = true;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -42,7 +39,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    //intake.setInversion(intakeMotorInverted, intakeArmInverted);
+    intake.setInversion(false, true);
     //hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
     //lift.setInversionStatus(inLeftLiftInvert, inRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
@@ -197,19 +194,25 @@ public class Robot extends TimedRobot {
         hopper.stop();
 
     }
-
+    */
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      //intake.moveArm(.25);
+      intake.moveArm(.5);
 
     }
 
-    if (XBOXController.getPOV() == 180) {
+    else if (XBOXController.getPOV() == 180) {
 
-      //intake.moveArm(-.25);
+      intake.moveArm(-.5);
 
-    }*/
+    }
+
+    else {
+
+      intake.stopArm();
+
+    } 
   }
 
   /** This function is called once each time the robot enters test mode. */

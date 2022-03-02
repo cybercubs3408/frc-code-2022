@@ -71,4 +71,10 @@ public class Intake {
         intakeMotor.set(ControlMode.PercentOutput, 0);
 
     }
+
+    public void stopArm () {
+
+        intakeArm.set(ControlMode.PercentOutput, 0);
+
+    }
 }
