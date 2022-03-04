@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    intake.setInversion(false, true);
+    //intake.setInversion(false, true);
     //hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
     //lift.setInversionStatus(inLeftLiftInvert, inRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
     //left joystick trigger held--> first hopper motor in
     /*if (leftJoystick.getRawButtonPressed(1)) {
 
-      hopper.hopperIn(.3);
+      hopper.hopperIn(.4);
 
     }
     else if (leftJoystick.getRawButtonReleased(1)) {
@@ -155,7 +155,7 @@ public class Robot extends TimedRobot {
     //top, middle button on right joystick held --> intake to shooter (use after aiming/ready to shoot)
     /*if (rightJoystick.getRawButton(2)) {
 
-      hopper.hopperIn(.2);
+      hopper.hopperIn(.4);
       hopper.hopperShoot(.3);
 
     }*/
@@ -171,7 +171,7 @@ public class Robot extends TimedRobot {
     //X button on XBOX Controller --> outer hopper outtake
     if (XBOXController.getRawButton(3)) {
 
-      hopper.hopperOut(.3);
+      hopper.hopperOut(.4);
 
       
     }
@@ -198,13 +198,13 @@ public class Robot extends TimedRobot {
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      intake.moveArm(.5);
+      intake.moveArm(.20);
 
     }
 
     else if (XBOXController.getPOV() == 180) {
 
-      intake.moveArm(-.5);
+      intake.moveArm(-.25);
 
     }
 
