@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
   //Lift lift = new Lift(6, 5, 2, 3);
   //Limelight limelight = new Limelight(LimelightHeight), 104.0, LimelightAngle);
-  //Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
+  Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
   Joystick XBOXController = new Joystick(2);
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     //hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
     //lift.setInversionStatus(inLeftLiftInvert, inRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
-    //shooter.setInversionStatus(shooterRightInversion, shooterLeftInversion);
+    shooter.setInversionStatus(true, false);
 
   }
 
@@ -213,6 +213,18 @@ public class Robot extends TimedRobot {
       intake.stopArm();
 
     } 
+
+    if (XBOXController.getPOV() == 90) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5000);
+
+    }
+
+    else {
+
+      shooter.stop();
+
+    }
   }
 
   /** This function is called once each time the robot enters test mode. */
