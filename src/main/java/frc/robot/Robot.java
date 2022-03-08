@@ -21,11 +21,12 @@ import com.revrobotics.CANSparkMax;
  */
 public class Robot extends TimedRobot {
   
-  Intake intake = new Intake(2, 1);
-  //Hopper hopper = new Hopper(4, 3);
+  Intake intake = new Intake(16, 11);
+  Hopper hopper = new Hopper(15, 14);  ////// CHANGE HOPPER 3 TO A NEW ID
+
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
-  //Lift lift = new Lift(6, 5, 2, 3);
-  //Limelight limelight = new Limelight(LimelightHeight), 104.0, LimelightAngle);
+  Lift lift = new Lift(12, 13, 2, 3);
+  //Limelight limelight = new Limelight(LimelightHeight, 104.0, LimelightAngle);
   Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
@@ -39,11 +40,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     
-    //intake.setInversion(false, true);
-    //hopper.setInversion(false, true);
+    intake.setInversion(false, true);
+    hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
     //lift.setInversionStatus(inLeftLiftInvert, inRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
-    shooter.setInversionStatus(true, false);
 
   }
 
@@ -85,8 +85,8 @@ public class Robot extends TimedRobot {
 
     drivetrain.stop();
     drivetrain.resetEncoders();
-    //shooter.stop();
-    //shooter.resetEncoders();
+    shooter.stop();
+    shooter.resetEncoders();
 
     CameraServer.startAutomaticCapture(0);
     CameraServer.startAutomaticCapture(1);
@@ -103,37 +103,37 @@ public class Robot extends TimedRobot {
     drivetrain.drive(leftJoystick, rightJoystick);
 
     //Calls lift rotateLift method and rotates arm based on right joystick input; left = counter clockwise, right = clockwise
-    //lift.rotateLift(XBOXJoystick);
+    lift.rotateLift(XBOXController);
 
     //Calls lift moveLift method and moves lift up or down based on left XBOX joystick input; up = up, down = down on lift
-    //lift.moveLift(XBOXJoystick);
+    lift.moveLift(XBOXController);
 
     //L1 button is held --> spin intake
     if (XBOXController.getRawButtonPressed(5)) {
 
-      //intake.intakeIn(.5);
+      intake.intakeIn(.3);
 
     }
     else if (XBOXController.getRawButtonReleased(5)){
 
-      //intake.stop();
+      intake.stop();
 
     }
 
     //R1 button is held --> spin outtake
     if (XBOXController.getRawButtonPressed(6)) {
 
-      //intake.intakeIn(.5);
+      intake.intakeOut(.3);
 
     }
     else if (XBOXController.getRawButtonReleased(6)){
 
-      //intake.stop();
+      intake.stop();
 
     }
 
     //left joystick trigger held--> first hopper motor in
-    /*if (leftJoystick.getRawButtonPressed(1)) {
+    if (leftJoystick.getRawButtonPressed(1)) {
 
       hopper.hopperIn(.4);
 
@@ -142,7 +142,7 @@ public class Robot extends TimedRobot {
 
       hopper.stop();
 
-    }*/
+    }
 
     //right joystick trigger held --> aims robot and starts spinning flyehweel
     /*if (rightJoystick.getRawButtonPressed(1)) {
@@ -163,15 +163,14 @@ public class Robot extends TimedRobot {
     /*else if (rightJoystick.getRawButtonReleased(2)) {
 
       hopper.stop();
-      //shooter.stop();
 
-    }
+    }*/
     
-
+    
     //X button on XBOX Controller --> outer hopper outtake
     if (XBOXController.getRawButton(3)) {
 
-      hopper.hopperOut(.4);
+      hopper.hopperOut(.2);
 
       
     }
@@ -185,7 +184,7 @@ public class Robot extends TimedRobot {
     //Y button on XBOX Controller --> inner hopper motor outtakes
     if (XBOXController.getRawButton(4)) {
 
-      hopper.hopperSpit(.3);
+      hopper.hopperSpit(0.2);
 
     }
       
@@ -194,11 +193,37 @@ public class Robot extends TimedRobot {
         hopper.stop();
 
     }
-    */
+
+    //A button on XBOX Controller --> front motor intake
+    if (XBOXController.getRawButton(1)) {
+
+      hopper.hopperShoot(0.2);
+
+    }
+      
+    else if (XBOXController.getRawButtonReleased(1)) {
+
+        hopper.stop();
+
+    }
+
+    //B button on XBOX Controller --> back motor intake
+    if (XBOXController.getRawButton(2)) {
+
+      hopper.hopperIn(0.2);
+
+    }
+      
+    else if (XBOXController.getRawButtonReleased(2)) {
+
+        hopper.stop();
+
+    }
+  
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      intake.moveArm(.20);
+      intake.moveArm(.25);
 
     }
 
@@ -214,13 +239,16 @@ public class Robot extends TimedRobot {
 
     } 
 
+    //right on DPAD enable shooter
     if (XBOXController.getPOV() == 90) {
 
       shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5000);
+      shooter.updatePIDCoefficients(true);
+      //shooter.shooterTest2();
 
     }
-
-    else {
+    //left on DPAD disable shooter
+    if (XBOXController.getPOV() == 270) {
 
       shooter.stop();
 

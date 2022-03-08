@@ -276,4 +276,16 @@ public class Shooter{
         leftShooterEncoder.setPosition(0);
 
     }
+
+    public void shooterTest() {
+
+        rightShooterMotor.set(.2);
+
+    }
+
+    public void shooterTest2() {
+
+        leftShooterMotor.set(.2);
+
+    }
 }

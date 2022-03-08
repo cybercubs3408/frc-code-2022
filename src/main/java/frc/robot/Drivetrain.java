@@ -154,10 +154,10 @@ public class Drivetrain {
 
         while (travelDistance > targetDistance) {
 
-            frontLeft.set(-0.3);
-            frontRight.set(-0.3);
-            backLeft.set(-0.3);
-            backRight.set(-0.3);
+            frontLeft.set(0.3);
+            frontRight.set(0.3);
+            backLeft.set(0.3);
+            backRight.set(0.3);
 
         }
 
