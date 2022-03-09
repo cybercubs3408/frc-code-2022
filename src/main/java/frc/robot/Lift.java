@@ -36,7 +36,7 @@ public class Lift {
      * @param outRightRotateInvert Boolean for inversion status of the right motor controlling rotating lift
      */ 
 
-    public void setInversionStatus(boolean inLeftLiftInvert, boolean outLeftLiftInvert, boolean inRightLiftInvert, boolean outRightLiftInvert, boolean outLeftRotateInvert, boolean outRightRotateInvert) {
+    public void setInversionStatus(boolean inLeftLiftInvert, boolean inRightLiftInvert, boolean outLeftRotateInvert, boolean outRightRotateInvert) {
 
         inLeftLift.setInverted(inLeftLiftInvert);
         inRightLift.setInverted(inRightLiftInvert);
@@ -53,8 +53,8 @@ public class Lift {
     public void moveLift(Joystick joystick) {
 
         double power = (.3 * joystick.getRawAxis(1));
-        inLeftLift.set(ControlMode.PercentOutput, Math.abs(power));
-        inRightLift.set(ControlMode.PercentOutput, Math.abs(power));
+        inLeftLift.set(ControlMode.PercentOutput, -power);
+        inRightLift.set(ControlMode.PercentOutput, -power);
 
     }
 
@@ -65,9 +65,9 @@ public class Lift {
      */
     public void rotateLift(Joystick joystick) {
 
-        double power = (.3 * joystick.getRawAxis(4));
-        outLeftRotate.set(Math.abs(power));
-        outRightRotate.set(Math.abs(power));
+        double power = (.3 * joystick.getRawAxis(2));
+        outLeftRotate.set(power);
+        outRightRotate.set(power);
 
     }
 

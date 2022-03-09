@@ -22,17 +22,18 @@ import com.revrobotics.CANSparkMax;
 public class Robot extends TimedRobot {
   
   Intake intake = new Intake(16, 11);
-  Hopper hopper = new Hopper(15, 14);  ////// CHANGE HOPPER 3 TO A NEW ID
+  Hopper hopper = new Hopper(15, 14);
 
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
   Lift lift = new Lift(12, 13, 2, 3);
-  //Limelight limelight = new Limelight(LimelightHeight, 104.0, LimelightAngle);
+  //Limelight limelight = new Limelight(43.0, 104.0, LimelightAngle);
   Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
-  Joystick XBOXController = new Joystick(2);
+  Joystick XBOXController = new Joystick(3);
 
-  
+  public double noPIDPower = .5;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -43,7 +44,7 @@ public class Robot extends TimedRobot {
     intake.setInversion(false, true);
     hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
-    //lift.setInversionStatus(inLeftLiftInvert, inRightLiftInvert, outLeftRotateInvert, outRightRotateInvert);
+    lift.setInversionStatus(true, false, false, true);
 
   }
 
@@ -108,13 +109,123 @@ public class Robot extends TimedRobot {
     //Calls lift moveLift method and moves lift up or down based on left XBOX joystick input; up = up, down = down on lift
     lift.moveLift(XBOXController);
 
+
+    //left joystick trigger pushed--> run shooter with no PID Control
+    if (leftJoystick.getRawButtonPressed(1)) {
+
+      shooter.noPIDShoot(noPIDPower);
+
+    }
+    
+
+    //right joystick trigger pushed --> run shooter with PID Control
+    if (rightJoystick.getRawButtonPressed(1)) {
+
+      shooter.updatePIDCoefficients(true);
+      //drivetrain.prepareShoot(true, limelight);
+      //shooter.shoot(true, limelight);
+
+    }
+
+    //top, middle button on right joystick held --> intake to shooter (use after aiming/ready to shoot)
+    if (rightJoystick.getRawButton(2) || leftJoystick.getRawButton(2)) {
+
+      shooter.stop();
+
+    }
+
+    
+    //ALL POSSIBLE WAYS TO MOVE INTAKE AND HOPPER
+    //Push L2 on XBOX Controller, moves in intake and lower hopper
+    if (XBOXController.getRawButton(7)) {
+
+      intake.intakeIn(.3);
+      hopper.hopperIn(.3);
+
+    }
+
+    else if (XBOXController.getRawButtonReleased(7)) {
+
+      intake.stop();
+      hopper.stop();
+
+    }
+
+    //Push R2 on XBOX Controller, moves in both hopper motors
+    if (XBOXController.getRawButton(8)) {
+
+      hopper.hopperIn(.3);
+      hopper.hopperShoot(.3);
+
+    }
+
+    else if (XBOXController.getRawButtonReleased(8)) {
+
+      intake.stop();
+      hopper.stop();
+
+    }
+
+    //A button on XBOX Controller --> front motor intake
+    if (XBOXController.getRawButton(2)) {
+
+      hopper.hopperShoot(0.3);
+
+    }
+
+    else if (XBOXController.getRawButtonReleased(2)) {
+
+      hopper.stop();
+
+    }
+
+    //B button on XBOX Controller --> back motor intake
+    if (XBOXController.getRawButton(3)) {
+
+      hopper.hopperIn(0.3);
+
+    }
+
+    else if (XBOXController.getRawButtonReleased(3)) {
+
+      hopper.stop();
+
+    }
+
+    //X button on XBOX Controller --> outer hopper outtake
+    if (XBOXController.getRawButton(1)) {
+
+      hopper.hopperOut(.3);
+
+    }
+
+    else if (XBOXController.getRawButtonReleased(1)) {
+
+      hopper.stop();
+
+    }
+
+    //Y button on XBOX Controller --> inner hopper motor outtakes
+    if (XBOXController.getRawButton(4)) {
+
+      hopper.hopperSpit(0.3);
+
+    }
+
+    else if (XBOXController.getRawButtonReleased(4)) {
+
+      hopper.stop();
+
+    }
+
     //L1 button is held --> spin intake
     if (XBOXController.getRawButtonPressed(5)) {
 
       intake.intakeIn(.3);
 
     }
-    else if (XBOXController.getRawButtonReleased(5)){
+
+    else if (XBOXController.getRawButtonReleased(5)) {
 
       intake.stop();
 
@@ -126,99 +237,18 @@ public class Robot extends TimedRobot {
       intake.intakeOut(.3);
 
     }
-    else if (XBOXController.getRawButtonReleased(6)){
+
+    else if (XBOXController.getRawButtonReleased(6)) {
 
       intake.stop();
 
     }
-
-    //left joystick trigger held--> first hopper motor in
-    if (leftJoystick.getRawButtonPressed(1)) {
-
-      hopper.hopperIn(.4);
-
-    }
-    else if (leftJoystick.getRawButtonReleased(1)) {
-
-      hopper.stop();
-
-    }
-
-    //right joystick trigger held --> aims robot and starts spinning flyehweel
-    /*if (rightJoystick.getRawButtonPressed(1)) {
-
-      drivetrain.prepareShoot(true, limelight);
-      //shooter.shoot(true, limelight);
-
-    }*/
-
-    //top, middle button on right joystick held --> intake to shooter (use after aiming/ready to shoot)
-    /*if (rightJoystick.getRawButton(2)) {
-
-      hopper.hopperIn(.4);
-      hopper.hopperShoot(.3);
-
-    }*/
 
     /*else if (rightJoystick.getRawButtonReleased(2)) {
 
       hopper.stop();
 
     }*/
-    
-    
-    //X button on XBOX Controller --> outer hopper outtake
-    if (XBOXController.getRawButton(3)) {
-
-      hopper.hopperOut(.2);
-
-      
-    }
-    else if (XBOXController.getRawButtonReleased(3)) {
-
-      hopper.stop();
-
-    }
-
-
-    //Y button on XBOX Controller --> inner hopper motor outtakes
-    if (XBOXController.getRawButton(4)) {
-
-      hopper.hopperSpit(0.2);
-
-    }
-      
-    else if (XBOXController.getRawButtonReleased(4)) {
-
-        hopper.stop();
-
-    }
-
-    //A button on XBOX Controller --> front motor intake
-    if (XBOXController.getRawButton(1)) {
-
-      hopper.hopperShoot(0.2);
-
-    }
-      
-    else if (XBOXController.getRawButtonReleased(1)) {
-
-        hopper.stop();
-
-    }
-
-    //B button on XBOX Controller --> back motor intake
-    if (XBOXController.getRawButton(2)) {
-
-      hopper.hopperIn(0.2);
-
-    }
-      
-    else if (XBOXController.getRawButtonReleased(2)) {
-
-        hopper.stop();
-
-    }
   
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
@@ -239,18 +269,84 @@ public class Robot extends TimedRobot {
 
     } 
 
-    //right on DPAD enable shooter
-    if (XBOXController.getPOV() == 90) {
-
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5000);
-      shooter.updatePIDCoefficients(true);
-      //shooter.shooterTest2();
-
-    }
     //left on DPAD disable shooter
     if (XBOXController.getPOV() == 270) {
 
       shooter.stop();
+
+    }
+
+    //variable power values; For no PID Click right buttons on leftJoystick
+    if (leftJoystick.getRawButtonPressed(5)) {
+
+      noPIDPower = .6;
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(6)) {
+
+      noPIDPower = .7;
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(7)) {
+
+      noPIDPower = .75;
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(8)) {
+
+      noPIDPower = .8;
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(9)) {
+
+      noPIDPower = .9;
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(10)) {
+
+      noPIDPower = 1;
+
+    }
+
+    //Variable power values with PID Control; Click buttons on left of leftJoystick
+    if (leftJoystick.getRawButtonPressed(11)) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5100);
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(12)) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5200);
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(13)) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5300);
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(14)) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5400);
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(15)) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5500);
+
+    }
+
+    if (leftJoystick.getRawButtonPressed(16)) {
+
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5600);
 
     }
   }

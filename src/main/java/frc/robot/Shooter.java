@@ -277,15 +277,13 @@ public class Shooter{
 
     }
 
-    public void shooterTest() {
+    /**
+     * Method to shoot the robot using motor value instead of PID
+     * @param power Unspecified power to shooter motor
+     */
+    public void noPIDShoot(double power) {
 
-        rightShooterMotor.set(.2);
-
-    }
-
-    public void shooterTest2() {
-
-        leftShooterMotor.set(.2);
+        rightShooterMotor.set(power);
 
     }
 }
