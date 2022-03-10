@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
   Lift lift = new Lift(12, 13, 2, 3);
-  //Limelight limelight = new Limelight(43.0, 104.0, LimelightAngle);
+  Limelight limelight = new Limelight(43.0, 104.0, 20.0);
   Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
@@ -54,30 +54,66 @@ public class Robot extends TimedRobot {
 
     drivetrain.stop();
     drivetrain.resetEncoders();
-    //limelight.updateLimelightVariables(true);
+    limelight.updateLimelightVariables(true);
 
+    double yOffset = limelight.updateLimelightVariables(true);
+
+    while (yOffset > -7.5) {
+
+      drivetrain.autonomousDrive();
+      limelight.updateLimelightVariables(true);
+      yOffset = limelight.updateLimelightVariables(true);
+
+    }
+
+    //Code for autonomous shooting, should start after driving backward; test if shooter gets to speed before hopper starts
+    //drivetrain.prepareShoot(false, limelight);
+
+    drivetrain.stop();
+    yOffset = limelight.updateLimelightVariables(true);
+
+    while (yOffset < 12.0) {
+
+      drivetrain.autonomousDrive2();
+      limelight.updateLimelightVariables(true);
+      yOffset = limelight.updateLimelightVariables(true);
+
+    }
+
+    drivetrain.stop();
+    shooter.autoShoot(true, limelight);
+
+    boolean rpmLoop = false;
+
+    while (rpmLoop == false) {
+
+      shooter.checkRPM();
+      rpmLoop = shooter.checkRPM();
+
+    } 
+      
+    hopper.hopperIn(.2);
+    hopper.hopperShoot(.2);
+
+    double shooterSpeed = 5400.0;
+
+    while (shooterSpeed >= 5350.0) {
+
+      // hopefully will lock the time period until a ball goes through and breaks the loop
+      shooterSpeed = shooter.leftShooterEncoder.getVelocity();
+
+    } 
+    
+    drivetrain.stop();
+    hopper.stop();
+    shooter.stop();
+  
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    
-    //double targetDistance = limelight.updateLimelightVariables(false);
-    //drivetrain.autonomousDrive(targetDistance, 150.0);
-
-    //Code for autonomous shooting, should start after driving backward; test if shooter gets to speed before hopper starts
-    //if (targetDistance >= 150.0) {
-      //shooter.shoot(true, limelight);
-      //drivetrain.prepareShoot(false, limelight);
-
-      /**if (shooter.autoShoot() == true){ //should work for autonomous period shooting
-       * 
-      hopper.hopperIn(.2);
-      hopper.hopperShoot(.2);
-
-      }
-      */
-    //}
+     
   }
 
   /** This function is called once each time the robot enters teleoperated mode. */
@@ -140,7 +176,7 @@ public class Robot extends TimedRobot {
     if (XBOXController.getRawButton(7)) {
 
       intake.intakeIn(.3);
-      hopper.hopperIn(.3);
+      hopper.hopperShoot(.3);
 
     }
 
@@ -253,13 +289,13 @@ public class Robot extends TimedRobot {
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      intake.moveArm(.25);
+      intake.moveArm(.30);
 
     }
 
     else if (XBOXController.getPOV() == 180) {
 
-      intake.moveArm(-.25);
+      intake.moveArm(-.30);
 
     }
 

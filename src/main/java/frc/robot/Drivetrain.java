@@ -82,10 +82,10 @@ public class Drivetrain {
 
         // Alter decimal being multiplied to change the power as needed
 
-        frontLeft.set(0.75 * leftPower);
-        backLeft.set(0.75 * leftPower);
-        frontRight.set(0.75 * rightPower);
-        backRight.set(0.75 * rightPower);
+        frontLeft.set(0.75 * rightPower);
+        backLeft.set(0.75 * rightPower);
+        frontRight.set(0.75 * leftPower);
+        backRight.set(0.75 * leftPower);
     }
 
     /**
@@ -147,21 +147,23 @@ public class Drivetrain {
     /**
      * Code for autonomous driving of the robot
      * While the robot is within the tarmac, drive off
-     * @param targetDistance Current distance between the robot and the target, in inches
-     * @param travelDistance Constant, set distance that the robot must travel to exit the starting , in inches
      */
-    public void autonomousDrive (double targetDistance, double travelDistance) {
+    public void autonomousDrive () {
 
-        while (travelDistance > targetDistance) {
+        frontLeft.set(-0.2);
+        frontRight.set(-0.2);
+        backLeft.set(-0.2);
+        backRight.set(-0.2);
 
-            frontLeft.set(0.3);
-            frontRight.set(0.3);
-            backLeft.set(0.3);
-            backRight.set(0.3);
+    }
 
-        }
+    // Same as before but forward instead of back
+    public void autonomousDrive2 () {
 
-        stop();
+        frontLeft.set(0.2);
+        frontRight.set(0.2);
+        backLeft.set(0.2);
+        backRight.set(0.2);
 
     }
 }

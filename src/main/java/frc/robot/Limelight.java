@@ -45,7 +45,7 @@ public class Limelight {
         yOff = yOffEntry.getDouble(0.0);
         areaValue = areaValueEntry.getDouble(0.0);
         validity = validityEntry.getDouble(0.0);
-        double targetDistance = (targetHeight - limelightHeight) / Math.tan((limelightAngle + yOff) * Math.PI / 180);
+        //double targetDistance = (targetHeight - limelightHeight) / Math.tan((limelightAngle + yOff) * Math.PI / 180);
         
         if (smartDashboardDisplay) {
             SmartDashboard.putNumber("X Offset", xOff);
@@ -54,7 +54,7 @@ public class Limelight {
             SmartDashboard.putNumber("Validity", validity);
         }
 
-        return targetDistance;
+        return yOff;
 
     }
 }
