@@ -82,10 +82,10 @@ public class Drivetrain {
 
         // Alter decimal being multiplied to change the power as needed
 
-        frontLeft.set(0.75 * rightPower);
-        backLeft.set(0.75 * rightPower);
-        frontRight.set(0.75 * leftPower);
-        backRight.set(0.75 * leftPower);
+        frontLeft.set(0.75 * leftPower);
+        backLeft.set(0.75 * leftPower);
+        frontRight.set(0.75 * rightPower);
+        backRight.set(0.75 * rightPower);
     }
 
     /**
@@ -150,20 +150,20 @@ public class Drivetrain {
      */
     public void autonomousDrive () {
 
-        frontLeft.set(-0.2);
-        frontRight.set(-0.2);
-        backLeft.set(-0.2);
-        backRight.set(-0.2);
+        frontLeft.set(-0.1);
+        frontRight.set(-0.1);
+        backLeft.set(-0.1);
+        backRight.set(-0.1);
 
     }
 
     // Same as before but forward instead of back
     public void autonomousDrive2 () {
 
-        frontLeft.set(0.2);
-        frontRight.set(0.2);
-        backLeft.set(0.2);
-        backRight.set(0.2);
+        frontLeft.set(0.1);
+        frontRight.set(0.1);
+        backLeft.set(0.1);
+        backRight.set(0.1);
 
     }
 }

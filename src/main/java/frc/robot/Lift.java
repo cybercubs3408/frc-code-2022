@@ -65,9 +65,9 @@ public class Lift {
      */
     public void rotateLift(Joystick joystick) {
 
-        double power = .7 * joystick.getRawAxis(2);
-        outLeftRotate.set(power);
-        outRightRotate.set(power);
+        double power = joystick.getRawAxis(2);
+        outLeftRotate.set(-power);
+        outRightRotate.set(-power);
 
     }
 

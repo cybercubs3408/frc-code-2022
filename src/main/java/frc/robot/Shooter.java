@@ -239,7 +239,7 @@ public class Shooter{
     public void autoShoot (boolean smartDashboardDisplay, Limelight limelight) {
 
         //double targetDistance = limelight.updateLimelightVariables(smartDashboardDisplay);
-        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, 5400);
+        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, 5800);
         updatePIDCoefficients(smartDashboardDisplay);
         SmartDashboard.putNumber("RPM", leftShooterEncoder.getVelocity());
 

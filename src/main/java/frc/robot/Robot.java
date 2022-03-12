@@ -23,6 +23,7 @@ public class Robot extends TimedRobot {
   
   Intake intake = new Intake(16, 11);
   Hopper hopper = new Hopper(15, 14);
+  Timer timer = new Timer();
 
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
   Lift lift = new Lift(12, 13, 2, 3);
@@ -51,63 +52,128 @@ public class Robot extends TimedRobot {
   /** This function is run once each time the robot enters autonomous mode. */
   @Override
   public void autonomousInit() {
+    //if(myTimer)
 
-    drivetrain.stop();
-    drivetrain.resetEncoders();
-    limelight.updateLimelightVariables(true);
+    /** 
+    try{
 
-    double yOffset = limelight.updateLimelightVariables(true);
-
-    while (yOffset > -7.5) {
-
-      drivetrain.autonomousDrive();
-      limelight.updateLimelightVariables(true);
-      yOffset = limelight.updateLimelightVariables(true);
-
-    }
-
-    //Code for autonomous shooting, should start after driving backward; test if shooter gets to speed before hopper starts
-    //drivetrain.prepareShoot(false, limelight);
-
-    drivetrain.stop();
-    yOffset = limelight.updateLimelightVariables(true);
-
-    while (yOffset < 12.0) {
-
-      drivetrain.autonomousDrive2();
-      limelight.updateLimelightVariables(true);
-      yOffset = limelight.updateLimelightVariables(true);
-
-    }
-
-    drivetrain.stop();
-    shooter.autoShoot(true, limelight);
-
-    boolean rpmLoop = false;
-
-    while (rpmLoop == false) {
-
-      shooter.checkRPM();
-      rpmLoop = shooter.checkRPM();
-
-    } 
-      
-    hopper.hopperIn(.2);
-    hopper.hopperShoot(.2);
-
-    double shooterSpeed = 5400.0;
-
-    while (shooterSpeed >= 5350.0) {
-
-      // hopefully will lock the time period until a ball goes through and breaks the loop
-      shooterSpeed = shooter.leftShooterEncoder.getVelocity();
+      Thread.sleep(7000);
 
     } 
     
+    catch (InterruptedException e){
+
+      return;
+
+    }
+    */
+    
+    timer.reset();
+
+    timer.start();
+
+    while (timer.get() < 1.5) {
+
+      shooter.autoShoot(true, limelight);
+
+    }
+
+    while (timer.get() < 2.25) {
+    
+      hopper.hopperIn(.4);
+      hopper.hopperShoot(.4);
+
+    }
+
+    while (timer.get() < 5) {
+
+      shooter.stop();
+      hopper.stop();
+
+    }
+
+    while (timer.get() < 7){
+
+      drivetrain.resetEncoders();
+
+      double autoDistance = drivetrain.frontRightEncoder.getPosition();
+
+      while (autoDistance > -25.0) {
+      
+        drivetrain.autonomousDrive();
+        drivetrain.frontRightEncoder.getPosition();
+        autoDistance = drivetrain.frontRightEncoder.getPosition();
+
+      }
+
+      drivetrain.stop();
+
+    }
+    /** 
+    drivetrain.resetEncoders();
+
+    double autoDistance = drivetrain.frontRightEncoder.getPosition();
+
+    //while (yOffset > -7.5) {
+    while (autoDistance > -4.6) {
+    
+      drivetrain.autonomousDrive();
+      drivetrain.frontRightEncoder.getPosition();
+      autoDistance = drivetrain.frontRightEncoder.getPosition();
+
+      //limelight.updateLimelightVariables(true);
+      //yOffset = limelight.updateLimelightVariables(true);
+
+    }
+    */
+    /** 
     drivetrain.stop();
-    hopper.stop();
+    drivetrain.resetEncoders();
+    limelight.updateLimelightVariables(true); 
+
+    shooter.autoShoot(true, limelight);
+
+    
+    double rpmLoop = 0;
+
+    while (rpmLoop <= 5300.0) {
+      
+      rpmLoop = Math.abs(shooter.leftShooterEncoder.getVelocity());
+
+    } 
+      
+    hopper.hopperIn(.3);
+    hopper.hopperShoot(.3);
+
+    while (rpmLoop >= 5050.0) {
+
+      rpmLoop = Math.abs(shooter.leftShooterEncoder.getVelocity());
+
+    }    
+
     shooter.stop();
-  
+    hopper.stop();
+
+    drivetrain.resetEncoders();
+
+    double autoDistance = drivetrain.frontRightEncoder.getPosition();
+
+    //while (yOffset > -7.5) {
+    while (autoDistance > -25.0) {
+    
+      drivetrain.autonomousDrive();
+      drivetrain.frontRightEncoder.getPosition();
+      autoDistance = drivetrain.frontRightEncoder.getPosition();
+
+      //limelight.updateLimelightVariables(true);
+      //yOffset = limelight.updateLimelightVariables(true);
+
+    }
+
+    shooter.stop();
+    hopper.stop();
+    drivetrain.stop();
+    */
   }
 
   /** This function is called periodically during autonomous. */
@@ -124,9 +190,12 @@ public class Robot extends TimedRobot {
     drivetrain.resetEncoders();
     shooter.stop();
     shooter.resetEncoders();
+    hopper.stop();
+    intake.stop();
+
+    shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5600);
 
     CameraServer.startAutomaticCapture(0);
-    CameraServer.startAutomaticCapture(1);
 
   }
 
@@ -149,7 +218,7 @@ public class Robot extends TimedRobot {
     //left joystick trigger pushed--> run shooter with no PID Control
     if (leftJoystick.getRawButtonPressed(1)) {
 
-      shooter.noPIDShoot(noPIDPower);
+      shooter.updatePIDCoefficients(true);
 
     }
     
@@ -190,8 +259,8 @@ public class Robot extends TimedRobot {
     //Push R2 on XBOX Controller, moves in both hopper motors
     if (XBOXController.getRawButton(8)) {
 
-      hopper.hopperIn(.3);
-      hopper.hopperShoot(.3);
+      hopper.hopperIn(.4);
+      hopper.hopperShoot(.4);
 
     }
 
@@ -254,23 +323,17 @@ public class Robot extends TimedRobot {
 
     }
 
-    //L1 button is held --> spin intake
-    if (XBOXController.getRawButtonPressed(5)) {
+    //L1 button is pushed --> start flywheel
+    if (XBOXController.getRawButton(5)) {
 
-      intake.intakeIn(.3);
-
-    }
-
-    else if (XBOXController.getRawButtonReleased(5)) {
-
-      intake.stop();
+      shooter.updatePIDCoefficients(true);
 
     }
 
-    //R1 button is held --> spin outtake
-    if (XBOXController.getRawButtonPressed(6)) {
+    //R1 button is pushed --> spin outtake
+    if (XBOXController.getRawButton(6)) {
 
-      intake.intakeOut(.3);
+      shooter.stop();
 
     }
 
@@ -279,12 +342,6 @@ public class Robot extends TimedRobot {
       intake.stop();
 
     }
-
-    /*else if (rightJoystick.getRawButtonReleased(2)) {
-
-      hopper.stop();
-
-    }*/
   
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
@@ -310,82 +367,37 @@ public class Robot extends TimedRobot {
 
       shooter.stop();
 
-    }
+      }
 
-    //variable power values; For no PID Click right buttons on leftJoystick
-    if (leftJoystick.getRawButtonPressed(5)) {
+    if (XBOXController.getRawButton(9)) {
 
-      noPIDPower = .6;
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(6)) {
-
-      noPIDPower = .7;
+      lift.outLeftRotate.set(.9);
+      lift.outRightRotate.set(.9);
 
     }
 
-    if (leftJoystick.getRawButtonPressed(7)) {
+    else if (XBOXController.getRawButtonReleased(9)) {
 
-      noPIDPower = .75;
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(8)) {
-
-      noPIDPower = .8;
+      lift.outLeftRotate.set(0);
+      lift.outRightRotate.set(0);
 
     }
 
-    if (leftJoystick.getRawButtonPressed(9)) {
+    if (XBOXController.getRawButton(10)) {
 
-      noPIDPower = .9;
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(10)) {
-
-      noPIDPower = 1;
+      lift.outLeftRotate.set(-.9);
+      lift.outRightRotate.set(-.9);
 
     }
 
-    //Variable power values with PID Control; Click buttons on left of leftJoystick
-    if (leftJoystick.getRawButtonPressed(11)) {
+    else if (XBOXController.getRawButtonReleased(10)) {
 
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5100);
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(12)) {
-
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5200);
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(13)) {
-
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5300);
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(14)) {
-
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5400);
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(15)) {
-
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5500);
-
-    }
-
-    if (leftJoystick.getRawButtonPressed(16)) {
-
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5600);
+      lift.outLeftRotate.set(0);
+      lift.outRightRotate.set(0);
 
     }
   }
+  
 
   /** This function is called once each time the robot enters test mode. */
   @Override
@@ -399,3 +411,4 @@ public class Robot extends TimedRobot {
 
   }
 }
+
