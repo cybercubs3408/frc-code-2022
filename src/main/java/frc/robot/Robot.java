@@ -78,27 +78,41 @@ public class Robot extends TimedRobot {
 
     }
 
-    while (timer.get() < 2.25) {
+    while (timer.get() < 4) {
     
       hopper.hopperIn(.4);
       hopper.hopperShoot(.4);
 
     }
 
-    while (timer.get() < 5) {
+    while (timer.get() < 4.5) {
 
       shooter.stop();
       hopper.stop();
 
     }
 
-    while (timer.get() < 7){
+    while (timer.get() < 5) {
+
+      intake.moveArm(-0.15);
+
+    }
+
+    while (timer.get() < 5.5) {
+
+      intake.stop();
+      hopper.hopperShoot(.3);
+      intake.intakeIn(.3);
+
+    }
+
+    while (timer.get() < 6){
 
       drivetrain.resetEncoders();
 
       double autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-      while (autoDistance > -25.0) {
+      while (autoDistance > -23.0) {
       
         drivetrain.autonomousDrive();
         drivetrain.frontRightEncoder.getPosition();
@@ -107,73 +121,53 @@ public class Robot extends TimedRobot {
       }
 
       drivetrain.stop();
+      intake.stop();
+      hopper.stop();
 
-    }
-    /** 
-    drivetrain.resetEncoders();
+      drivetrain.resetEncoders();
 
-    double autoDistance = drivetrain.frontRightEncoder.getPosition();
-
-    //while (yOffset > -7.5) {
-    while (autoDistance > -4.6) {
-    
-      drivetrain.autonomousDrive();
-      drivetrain.frontRightEncoder.getPosition();
       autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-      //limelight.updateLimelightVariables(true);
-      //yOffset = limelight.updateLimelightVariables(true);
+      while (autoDistance < 23.0) {
 
-    }
-    */
-    /** 
-    drivetrain.stop();
-    drivetrain.resetEncoders();
-    limelight.updateLimelightVariables(true); 
+        drivetrain.autonomousDrive2();
+        drivetrain.frontRightEncoder.getPosition();
+        autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-    shooter.autoShoot(true, limelight);
+      }
 
-    
-    double rpmLoop = 0;
-
-    while (rpmLoop <= 5300.0) {
-      
-      rpmLoop = Math.abs(shooter.leftShooterEncoder.getVelocity());
-
-    } 
-      
-    hopper.hopperIn(.3);
-    hopper.hopperShoot(.3);
-
-    while (rpmLoop >= 5050.0) {
-
-      rpmLoop = Math.abs(shooter.leftShooterEncoder.getVelocity());
-
-    }    
-
-    shooter.stop();
-    hopper.stop();
-
-    drivetrain.resetEncoders();
-
-    double autoDistance = drivetrain.frontRightEncoder.getPosition();
-
-    //while (yOffset > -7.5) {
-    while (autoDistance > -25.0) {
-    
-      drivetrain.autonomousDrive();
-      drivetrain.frontRightEncoder.getPosition();
-      autoDistance = drivetrain.frontRightEncoder.getPosition();
-
-      //limelight.updateLimelightVariables(true);
-      //yOffset = limelight.updateLimelightVariables(true);
+      drivetrain.stop();
 
     }
 
+    timer.reset();
+    timer.start();
+
+    while (timer.get() < 1.5) {
+  
+        shooter.autoShoot(true, limelight);
+  
+    }
+  
+    while (timer.get() < 4) {
+      
+      hopper.hopperIn(.4);
+      hopper.hopperShoot(.4);
+  
+    }
+  
+    while (timer.get() < 4.5) {
+  
+      shooter.stop();
+      hopper.stop();
+  
+    }
+
+    drivetrain.stop();
     shooter.stop();
     hopper.stop();
-    drivetrain.stop();
-    */
+    intake.stop();
+
   }
 
   /** This function is called periodically during autonomous. */

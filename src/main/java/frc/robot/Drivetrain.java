@@ -151,18 +151,18 @@ public class Drivetrain {
     public void autonomousDrive () {
 
         frontLeft.set(-0.1);
-        frontRight.set(-0.1);
+        frontRight.set(-0.14);
         backLeft.set(-0.1);
-        backRight.set(-0.1);
+        backRight.set(-0.14);
 
     }
 
     // Same as before but forward instead of back
     public void autonomousDrive2 () {
 
-        frontLeft.set(0.1);
+        frontLeft.set(0.08);
         frontRight.set(0.1);
-        backLeft.set(0.1);
+        backLeft.set(0.08);
         backRight.set(0.1);
 
     }
