@@ -22,12 +22,12 @@ public class Shooter{
     //Index, undefined variable that will be used to iterate through arrays
     int index;
     //Variable for total length of arrays, currently set to 10 (so 11 array values)
-    int tableList = 10;
+    int tableList = 5;
 
-    //Arrays for shooter input (distance) nd corresponding output (shooter power)
+    //Arrays for shooter input (distance) and corresponding output (shooter power)
     //MAKE SURE VALUES ARE PUT IN IN THE SAME ORDER OR IT WILL NOT WORK
-    double[] arrayInput = {};
-    double[] arrayOutput = {};
+    double[] arrayInput = {11.1, 8.15, 5.6, 3.25, 2.0, 0.66};
+    double[] arrayOutput = {4100, 4150, 4200, 4350, 4550, 5000};
 
     /**
      * Constructor method for the shooter class
@@ -190,16 +190,16 @@ public class Shooter{
      * @param targetDistance The distance between the limelight and the target
      * @return RPM to be input into setPIDcoefficients in shooter.shoot
      */
-    public double shooterRanges(double targetDistance) {
+    public double shooterRanges(double limelightAngle) {
 
         //defines rpm variable to be output and defines the index variable as 1 to start iteration
         double rpm;
         index = 0;
 
         //iterates through the array of distances and breaks the loop once the distance is less than an input value
-        while (targetDistance > arrayInput[index] && index < tableList) {
+        while (limelightAngle < arrayInput[index] && index < tableList) {
 
-            index ++;
+            index = index + 1;
         
         }
 
@@ -211,7 +211,9 @@ public class Shooter{
         }
 
         //plugs the corresponding inputs and outputs into the equation for rpm output
-        rpm = arrayInput[(index - 1)] + (targetDistance - arrayInput[(index - 1)]) * (arrayOutput[index] - arrayOutput[(index - 1)]) / (arrayInput[index] - arrayInput[(index - 1)]);
+        rpm = arrayOutput[(index - 1)] + (limelightAngle - arrayInput[(index - 1)]) * (arrayOutput[index] - arrayOutput[(index - 1)]) / (arrayInput[index] - arrayInput[(index - 1)]);
+
+        //returns rpm for outside use
         return rpm;
 
     }
@@ -223,11 +225,10 @@ public class Shooter{
      */
     public void shoot (boolean smartDashboardDisplay, Limelight limelight) {
 
-        double targetDistance = limelight.updateLimelightVariables(smartDashboardDisplay);
-        double rpm = shooterRanges(targetDistance);
+        double target = limelight.updateLimelightVariables(smartDashboardDisplay);
+        double rpm = shooterRanges(target);
         setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, rpm);
         updatePIDCoefficients(smartDashboardDisplay);
-        SmartDashboard.putNumber("RPM", leftShooterEncoder.getVelocity());
 
     }
 
@@ -239,7 +240,7 @@ public class Shooter{
     public void autoShoot (boolean smartDashboardDisplay, Limelight limelight) {
 
         //double targetDistance = limelight.updateLimelightVariables(smartDashboardDisplay);
-        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, 5800);
+        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, 5000);
         updatePIDCoefficients(smartDashboardDisplay);
         SmartDashboard.putNumber("RPM", leftShooterEncoder.getVelocity());
 
@@ -272,22 +273,6 @@ public class Shooter{
     public void noPIDShoot(double power) {
 
         rightShooterMotor.set(power);
-
-    }
-
-    public boolean checkRPM() {
-
-        if (leftShooterEncoder.getVelocity() >= 5300) {
-
-            return true;
-
-        }
-
-        else {
-
-            return false;
-
-        }
 
     }
 }

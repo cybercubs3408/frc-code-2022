@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   Timer timer = new Timer();
 
   Drivetrain drivetrain = new Drivetrain(6, 8, 7, 9);
-  Lift lift = new Lift(12, 13, 2, 3);
+  Lift lift = new Lift(12, 13);
   Limelight limelight = new Limelight(43.0, 104.0, 20.0);
   Shooter shooter = new Shooter(6e-5, 0, 0, 4, 5, 0, 0.000015, -1, 1, 6000);
   Joystick leftJoystick = new Joystick(0);
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     intake.setInversion(false, true);
     hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
-    lift.setInversionStatus(true, false, false, true);
+    lift.setInversionStatus(true, false);
 
   }
 
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
 
     timer.start();
 
-    while (timer.get() < 1.5) {
+    /*while (timer.get() < 1.5) {
 
       shooter.autoShoot(true, limelight);
 
@@ -84,6 +84,7 @@ public class Robot extends TimedRobot {
       hopper.hopperShoot(.4);
 
     }
+    
 
     while (timer.get() < 4.5) {
 
@@ -91,14 +92,15 @@ public class Robot extends TimedRobot {
       hopper.stop();
 
     }
+    */
 
-    while (timer.get() < 5) {
+    while (timer.get() < .5) {
 
       intake.moveArm(-0.15);
 
     }
 
-    while (timer.get() < 5.5) {
+    while (timer.get() < 1.0) {
 
       intake.stop();
       hopper.hopperShoot(.3);
@@ -106,7 +108,7 @@ public class Robot extends TimedRobot {
 
     }
 
-    while (timer.get() < 6){
+    while (timer.get() < 3.0){
 
       drivetrain.resetEncoders();
 
@@ -187,9 +189,7 @@ public class Robot extends TimedRobot {
     hopper.stop();
     intake.stop();
 
-    shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5600);
-
-    CameraServer.startAutomaticCapture(0);
+    shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5000);
 
   }
 
@@ -201,9 +201,6 @@ public class Robot extends TimedRobot {
     
     //Calls drivetrain drive method and drives based on pilot controller inputs
     drivetrain.drive(leftJoystick, rightJoystick);
-
-    //Calls lift rotateLift method and rotates arm based on right joystick input; left = counter clockwise, right = clockwise
-    lift.rotateLift(XBOXController);
 
     //Calls lift moveLift method and moves lift up or down based on left XBOX joystick input; up = up, down = down on lift
     lift.moveLift(XBOXController);
@@ -356,38 +353,22 @@ public class Robot extends TimedRobot {
 
     } 
 
-    //left on DPAD disable shooter
+    //left on DPAD, test limelight shooter
     if (XBOXController.getPOV() == 270) {
 
-      shooter.stop();
-
-      }
-
-    if (XBOXController.getRawButton(9)) {
-
-      lift.outLeftRotate.set(.9);
-      lift.outRightRotate.set(.9);
+      shooter.shoot(true, limelight);
 
     }
 
-    else if (XBOXController.getRawButtonReleased(9)) {
+    if (leftJoystick.getRawButton(8)) {
 
-      lift.outLeftRotate.set(0);
-      lift.outRightRotate.set(0);
-
-    }
-
-    if (XBOXController.getRawButton(10)) {
-
-      lift.outLeftRotate.set(-.9);
-      lift.outRightRotate.set(-.9);
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5300);
 
     }
 
-    else if (XBOXController.getRawButtonReleased(10)) {
+    if (leftJoystick.getRawButton(14)) {
 
-      lift.outLeftRotate.set(0);
-      lift.outRightRotate.set(0);
+      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 4900);
 
     }
   }

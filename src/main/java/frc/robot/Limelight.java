@@ -37,7 +37,7 @@ public class Limelight {
     /**
      * Periodically updates the limelight variables
      * @param smartDashboardDisplay Boolean to display whether or not to display smart dashboard values
-     * @return Returns the variable targetDistance for use in autonomous driving class
+     * @return Returns the variable yOff for use
      */
     public double updateLimelightVariables (Boolean smartDashboardDisplay) {
 
@@ -45,13 +45,14 @@ public class Limelight {
         yOff = yOffEntry.getDouble(0.0);
         areaValue = areaValueEntry.getDouble(0.0);
         validity = validityEntry.getDouble(0.0);
-        //double targetDistance = (targetHeight - limelightHeight) / Math.tan((limelightAngle + yOff) * Math.PI / 180);
+        //targetDistance = (targetHeight - limelightHeight) / Math.tan((limelightAngle + yOff) * Math.PI / 180);
         
         if (smartDashboardDisplay) {
             SmartDashboard.putNumber("X Offset", xOff);
             SmartDashboard.putNumber("Y Offset", yOff);
             SmartDashboard.putNumber("Area (Target Size)", areaValue);
             SmartDashboard.putNumber("Validity", validity);
+            SmartDashboard.putNumber("Distance", targetDistance);
         }
 
         return yOff;
