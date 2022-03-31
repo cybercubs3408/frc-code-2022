@@ -26,8 +26,8 @@ public class Shooter{
 
     //Arrays for shooter input (distance) and corresponding output (shooter power)
     //MAKE SURE VALUES ARE PUT IN IN THE SAME ORDER OR IT WILL NOT WORK
-    double[] arrayInput = {11.1, 8.15, 5.6, 3.25, 2.0, 0.66};
-    double[] arrayOutput = {4100, 4150, 4200, 4350, 4550, 5000};
+    double[] arrayInput = {16.7, 11.6, 8.1, 5.4, 2.54, 1.5};
+    double[] arrayOutput = {.62, .65, .68, .75, .85, .95};
 
     /**
      * Constructor method for the shooter class
@@ -227,9 +227,15 @@ public class Shooter{
 
         double target = limelight.updateLimelightVariables(smartDashboardDisplay);
         double rpm = shooterRanges(target);
-        setPIDCoefficients(smartDashboardDisplay, 0.00012, 0.0006, 0.0, 0.005, rpm);
-        updatePIDCoefficients(smartDashboardDisplay);
 
+        rightShooterMotor.set(rpm);
+        leftShooterMotor.set(rpm);
+
+        if (smartDashboardDisplay) {
+
+            SmartDashboard.putNumber("RPM", rpm);
+
+        }
     }
 
     /**
@@ -273,6 +279,7 @@ public class Shooter{
     public void noPIDShoot(double power) {
 
         rightShooterMotor.set(power);
+        leftShooterMotor.set(power);
 
     }
 }

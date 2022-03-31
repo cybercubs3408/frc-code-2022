@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 
 /**
@@ -96,7 +98,7 @@ public class Robot extends TimedRobot {
 
     while (timer.get() < .5) {
 
-      intake.moveArm(-0.15);
+      intake.moveArm(0.3);
 
     }
 
@@ -114,7 +116,7 @@ public class Robot extends TimedRobot {
 
       double autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-      while (autoDistance > -23.0) {
+      while (autoDistance > -25.0) {
       
         drivetrain.autonomousDrive();
         drivetrain.frontRightEncoder.getPosition();
@@ -130,7 +132,7 @@ public class Robot extends TimedRobot {
 
       autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-      while (autoDistance < 23.0) {
+      while (autoDistance < 8.0) {
 
         drivetrain.autonomousDrive2();
         drivetrain.frontRightEncoder.getPosition();
@@ -145,24 +147,30 @@ public class Robot extends TimedRobot {
     timer.reset();
     timer.start();
 
-    while (timer.get() < 1.5) {
+    while (timer.get() < 3.5) {
   
-        shooter.autoShoot(true, limelight);
-  
-    }
-  
-    while (timer.get() < 4) {
-      
-      hopper.hopperIn(.4);
-      hopper.hopperShoot(.4);
+      shooter.shoot(false, limelight);
   
     }
   
     while (timer.get() < 4.5) {
+      
+      hopper.hopperIn(.4);
   
+    }
+  
+    while (timer.get() < 6.5) {
+  
+      hopper.hopperIn(.4);
+      hopper.hopperShoot(.4);
+  
+    }
+
+    while (timer.get() < 8) {
+
       shooter.stop();
       hopper.stop();
-  
+
     }
 
     drivetrain.stop();
@@ -189,7 +197,7 @@ public class Robot extends TimedRobot {
     hopper.stop();
     intake.stop();
 
-    shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5000);
+    shooter.setPIDCoefficients(true,  0.00012, 1, 0.0, 0.00, 4500);
 
   }
 
@@ -209,17 +217,18 @@ public class Robot extends TimedRobot {
     //left joystick trigger pushed--> run shooter with no PID Control
     if (leftJoystick.getRawButtonPressed(1)) {
 
-      shooter.updatePIDCoefficients(true);
+      //shooter.updatePIDCoefficients(true);
+      shooter.shoot(true, limelight);
 
     }
     
 
-    //right joystick trigger pushed --> run shooter with PID Control
+    //right joystick trigger pushed --> run shooter with no PID Control
     if (rightJoystick.getRawButtonPressed(1)) {
 
-      shooter.updatePIDCoefficients(true);
+      //shooter.updatePIDCoefficients(true);
       //drivetrain.prepareShoot(true, limelight);
-      //shooter.shoot(true, limelight);
+      shooter.shoot(true, limelight);
 
     }
 
@@ -317,7 +326,8 @@ public class Robot extends TimedRobot {
     //L1 button is pushed --> start flywheel
     if (XBOXController.getRawButton(5)) {
 
-      shooter.updatePIDCoefficients(true);
+      shooter.shoot(true, limelight);
+      //shooter.updatePIDCoefficients(true);
 
     }
 
@@ -337,13 +347,13 @@ public class Robot extends TimedRobot {
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      intake.moveArm(.30);
+      intake.moveArm(-.35);
 
     }
 
     else if (XBOXController.getPOV() == 180) {
 
-      intake.moveArm(-.30);
+      intake.moveArm(.30);
 
     }
 
@@ -357,18 +367,19 @@ public class Robot extends TimedRobot {
     if (XBOXController.getPOV() == 270) {
 
       shooter.shoot(true, limelight);
+      //shooter.noPIDShoot(.95);
 
     }
 
     if (leftJoystick.getRawButton(8)) {
 
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 5300);
+      SmartDashboard.putNumber("Current RPM", shooter.leftShooterEncoder.getVelocity());
 
     }
 
     if (leftJoystick.getRawButton(14)) {
 
-      shooter.setPIDCoefficients(true,  0.00012, 0.0006, 0.0, 0.005, 4900);
+      SmartDashboard.putNumber("Current RPM", shooter.leftShooterEncoder.getVelocity());
 
     }
   }

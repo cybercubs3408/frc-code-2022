@@ -52,7 +52,6 @@ public class Limelight {
             SmartDashboard.putNumber("Y Offset", yOff);
             SmartDashboard.putNumber("Area (Target Size)", areaValue);
             SmartDashboard.putNumber("Validity", validity);
-            SmartDashboard.putNumber("Distance", targetDistance);
         }
 
         return yOff;
