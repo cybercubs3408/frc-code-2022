@@ -24,10 +24,12 @@ public class Shooter{
     //Variable for total length of arrays, currently set to 10 (so 11 array values)
     int tableList = 5;
 
+    public double k = 1.1;
+
     //Arrays for shooter input (distance) and corresponding output (shooter power)
     //MAKE SURE VALUES ARE PUT IN IN THE SAME ORDER OR IT WILL NOT WORK
     double[] arrayInput = {16.7, 11.6, 8.1, 5.4, 2.54, 1.5};
-    double[] arrayOutput = {.62, .65, .68, .75, .85, .95};
+    double[] arrayOutput = {.62, .65, .68 * k, .75 * k, .85 * k, .95 * k};
 
     /**
      * Constructor method for the shooter class
@@ -219,6 +221,18 @@ public class Shooter{
     }
 
     /**
+     * Method to change the constant being applied to the array
+     * @param newK power value to make k
+     */
+    public void changeK(double newK) {
+
+        k = newK;
+        double[] arrayOutput2 = {.62 * (k - .09), .65 * (k - .05), .68 * k, .75 * k, .85 * k, .95 * k};
+        arrayOutput = arrayOutput2;
+
+    }
+
+    /**
      * Method to actually shoot the shooter using PID values read from Smart Dashboard
      * @param smartDashboardDisplay Boolean on whether or not to display smartDashboard values
      * @param limelight The limelight on the robot, lets limelight function be used in shooter class
@@ -227,6 +241,12 @@ public class Shooter{
 
         double target = limelight.updateLimelightVariables(smartDashboardDisplay);
         double rpm = shooterRanges(target);
+
+        if (rpm >= .95) {
+
+            rpm = .95;
+
+        }
 
         rightShooterMotor.set(rpm);
         leftShooterMotor.set(rpm);

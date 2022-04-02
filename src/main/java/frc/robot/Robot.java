@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
 
       double autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-      while (autoDistance > -25.0) {
+      while (autoDistance > -30.0) {
       
         drivetrain.autonomousDrive();
         drivetrain.frontRightEncoder.getPosition();
@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
 
       autoDistance = drivetrain.frontRightEncoder.getPosition();
 
-      while (autoDistance < 8.0) {
+      while (autoDistance < 10.0) {
 
         drivetrain.autonomousDrive2();
         drivetrain.frontRightEncoder.getPosition();
@@ -159,7 +159,7 @@ public class Robot extends TimedRobot {
   
     }
   
-    while (timer.get() < 6.5) {
+    while (timer.get() < 5.5) {
   
       hopper.hopperIn(.4);
       hopper.hopperShoot(.4);
@@ -314,6 +314,7 @@ public class Robot extends TimedRobot {
     if (XBOXController.getRawButton(4)) {
 
       hopper.hopperSpit(0.3);
+      intake.intakeOut(0.3);
 
     }
 
@@ -331,7 +332,14 @@ public class Robot extends TimedRobot {
 
     }
 
-    //R1 button is pushed --> spin outtake
+    ///// EXPERIMENTAL CODE TO ADJUST POWER WHILE MOVING
+    /**while (XBOXController.getRawButton(5)) {
+
+      shooter.shoot(true, limelight);
+
+    }*/
+
+    //R1 button is pushed --> stop shooter
     if (XBOXController.getRawButton(6)) {
 
       shooter.stop();
@@ -373,13 +381,43 @@ public class Robot extends TimedRobot {
 
     if (leftJoystick.getRawButton(8)) {
 
-      SmartDashboard.putNumber("Current RPM", shooter.leftShooterEncoder.getVelocity());
+      shooter.changeK(1.0);
+
+    }
+
+    if (leftJoystick.getRawButton(9)) {
+
+      shooter.changeK(.9);
+
+    }
+
+    if (leftJoystick.getRawButton(10)) {
+
+      shooter.changeK(.8);
 
     }
 
     if (leftJoystick.getRawButton(14)) {
 
-      SmartDashboard.putNumber("Current RPM", shooter.leftShooterEncoder.getVelocity());
+      shooter.changeK(1.0);
+
+    }
+
+    if (leftJoystick.getRawButton(15)) {
+
+      shooter.changeK(1.2);
+
+    }
+
+    if (leftJoystick.getRawButton(16)) {
+
+      shooter.changeK(1.3);
+
+    }
+
+    if (leftJoystick.getRawButton(5)) {
+
+      SmartDashboard.putNumber("currentRpm", shooter.leftShooterEncoder.getVelocity());
 
     }
   }
