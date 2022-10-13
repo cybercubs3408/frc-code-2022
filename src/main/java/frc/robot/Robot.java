@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -258,11 +257,11 @@ public class Robot extends TimedRobot {
     }
 
     
-    //ALL POSSIBLE WAYS TO MOVE INTAKE AND HOPPER
+    //ALL POSSIBLE WAYS TO MOVE INTAKE AND HOPPER!
     //Push L2 on XBOX Controller, moves in intake and lower hopper
     if (XBOXController.getRawButton(7)) {
 
-      intake.intakeIn(.3);
+      intake.intakeIn(.4);
       hopper.hopperShoot(.3);
 
     }
@@ -373,7 +372,7 @@ public class Robot extends TimedRobot {
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      intake.moveArm(-.40);
+      intake.moveArm(-.45);
 
     }
 
