@@ -5,11 +5,18 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 import com.revrobotics.CANSparkMax;
 
@@ -34,6 +41,8 @@ public class Robot extends TimedRobot {
   Joystick leftJoystick = new Joystick(0);
   Joystick rightJoystick = new Joystick(1);
   Joystick XBOXController = new Joystick(3);
+  String trajectoryJSON = "paths/output/Gamer.wpilib.json";  // Path to get to gamer.wpilib.json . Might not work as intended
+  Trajectory trajectory = new Trajectory();
 
   public double noPIDPower = .5;
 
@@ -48,6 +57,15 @@ public class Robot extends TimedRobot {
     hopper.setInversion(false, true);
     drivetrain.setInversion(true, false, true, false);
     lift.setInversionStatus(true, false);
+ 
+//Below is Pathweaver code that probably doesnt work. Please approach with caution
+
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+   } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+   }
 
   }
 
@@ -355,7 +373,7 @@ public class Robot extends TimedRobot {
     //For all .getPOV's make sure to test if it is only while the button is held or not
     if (XBOXController.getPOV() == 0) {
 
-      intake.moveArm(-.35);
+      intake.moveArm(-.40);
 
     }
 
